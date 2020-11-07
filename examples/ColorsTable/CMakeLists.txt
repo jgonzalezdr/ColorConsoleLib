@@ -45,13 +45,15 @@ set_target_properties( ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} )
 # External libraries
 #
 
-target_link_libraries( ${PROJECT_NAME} ColorConsoleLib )
+if( BUILD_SHARED_LIB )
+    target_link_libraries( ${PROJECT_NAME} ColorConsole )
 
-if( BUILD_SHARED_LIBS )
-    add_custom_target( ${PROJECT_NAME}_CopyLibs ALL
-                       DEPENDS ColorConsoleLib
-                       COMMAND cmake -E copy "$<TARGET_FILE:ColorConsoleLib>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
-    add_dependencies( build ${PROJECT_NAME}_CopyLibs ) 
+    add_custom_target( ${PROJECT_NAME}_CopySharedLibs ALL
+                       DEPENDS ColorConsole
+                       COMMAND cmake -E copy "$<TARGET_FILE:ColorConsole>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
+    add_dependencies( build ${PROJECT_NAME}_CopySharedLibs ) 
+elseif( BUILD_STATIC_LIB )
+    target_link_libraries( ${PROJECT_NAME} ColorConsole_static )
 endif()
 
 #

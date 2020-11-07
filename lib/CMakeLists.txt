@@ -1,8 +1,9 @@
 cmake_minimum_required( VERSION 3.13 )
 
-project( ColorConsoleLib VERSION 1.0.0 )
+project( ColorConsole VERSION 1.0.0 )
 
-option( BUILD_SHARED_LIBS "Build shared library" ON )
+option( BUILD_STATIC_LIB "Build static library" ON )
+option( BUILD_SHARED_LIB "Build shared library" ON )
 option( REQUIRE_INITIALIZATION "Make initialization mandatory" ON )
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
@@ -46,54 +47,79 @@ include( GenerateProductVersion )
 generate_product_version(
     PRODUCT_VERSION_FILES
     NAME ${PROJECT_NAME}
-    FILE_DESCRIPTION "Example app description"
+    FILE_DESCRIPTION "Color Console Library"
     VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
     VERSION_MINOR ${PROJECT_VERSION_MINOR}
     VERSION_PATCH ${PROJECT_VERSION_PATCH}
     VERSION_BUILD ${PROJECT_VERSION_BUILD}
     VERSION_SUFFIX "${PROJECT_VERSION_SUFFIX}"
-    COMPANY_NAME "www.example.com"
-    COMPANY_COPYRIGHT "(C) Copyright YEAR Whatever"
+    COMPANY_NAME "www.gdr-sistemas.com"
+    COMPANY_COPYRIGHT "(C) Copyright 2018-2020 Jesus Gonzalez"
     PRIVATE_BUILD "${PRIVATE_BUILD_INFO}"
     SPECIAL_BUILD "${SPECIAL_BUILD_INFO}"
     PRERELEASE "${PRERELEASE}"
     PATCHED "${PATCHED_RELEASE}"
-    HOMEPAGE "http://example.com/yourproduct/"
-    MAINTAINER "Your Name <yourname@example.com>"
+    HOMEPAGE "https://github.com/jgonzalezdr/ColorConsoleLib"
+    MAINTAINER "Jesús González <jgonzalez@gdr-sistemas.com>"
     EXPORT_TO_PARENT_SCOPE
 )
 
 #
-# Library definition
+# Common library definitions
 #
 
 if( MSVC )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc" )
 endif()
 
-if ( BUILD_SHARED_LIBS )
+if ( BUILD_SHARED_LIB )
+    #
+    # Shared library definition
+    #
+
     add_library( ${PROJECT_NAME} SHARED ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
     target_compile_definitions( ${PROJECT_NAME} PUBLIC "COLORCONSOLE_SHARED_LIB" )
-else()
-    add_library( ${PROJECT_NAME} STATIC ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
+
+    target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
+
+    add_dependencies( build ${PROJECT_NAME} )
+
+    if( REQUIRE_INITIALIZATION OR WIN32 )
+        target_compile_definitions( ${PROJECT_NAME} PRIVATE "COLORCONSOLE_REQUIRE_INITIALIZATION" )
+    endif()
+
+    #
+    # Shared library properties
+    #
+
+    set_target_properties( ${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_dbg" )
+    set_target_properties( ${PROJECT_NAME} PROPERTIES COVERAGE_POSTFIX "_cov" )
+    set_target_properties( ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} )
 endif()
 
-if( REQUIRE_INITIALIZATION OR (WIN32 AND BUILD_SHARED_LIBS) )
-    target_compile_definitions( ${PROJECT_NAME} PRIVATE "COLORCONSOLE_REQUIRE_INITIALIZATION" )
+if ( BUILD_STATIC_LIB )
+    #
+    # Static library definition
+    #
+
+    add_library( ${PROJECT_NAME}_static STATIC ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
+
+    target_include_directories( ${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
+
+    add_dependencies( build ${PROJECT_NAME}_static )
+
+    if( REQUIRE_INITIALIZATION )
+        target_compile_definitions( ${PROJECT_NAME}_static PRIVATE "COLORCONSOLE_REQUIRE_INITIALIZATION" )
+    endif()
+
+    #
+    # Static library properties
+    #
+
+    set_target_properties( ${PROJECT_NAME}_static PROPERTIES DEBUG_POSTFIX "_dbg" )
+    set_target_properties( ${PROJECT_NAME}_static PROPERTIES COVERAGE_POSTFIX "_cov" )
+    set_target_properties( ${PROJECT_NAME}_static PROPERTIES VERSION ${PROJECT_VERSION} )
 endif()
-
-
-target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
-
-add_dependencies( build ${PROJECT_NAME} )
-
-#
-# Library properties
-#
-
-set_target_properties( ${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_dbg" )
-set_target_properties( ${PROJECT_NAME} PROPERTIES COVERAGE_POSTFIX "_cov" )
-set_target_properties( ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} )
 
 #
 # Install
@@ -101,5 +127,11 @@ set_target_properties( ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} )
 
 include( InstallersSetup.cmake )
 
-install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib )
+if ( BUILD_SHARED_LIB )
+    install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib )
+endif()
+if ( BUILD_STATIC_LIB )
+    install( TARGETS ${PROJECT_NAME}_static RUNTIME DESTINATION lib )
+endif()
+
 install( DIRECTORY include/ DESTINATION include ) 

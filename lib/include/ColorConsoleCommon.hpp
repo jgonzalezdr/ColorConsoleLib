@@ -13,7 +13,7 @@
 #include <iostream>
 
 #if defined(WIN32) && defined(COLORCONSOLE_SHARED_LIB)
-#   if defined(ColorConsoleLib_EXPORTS)
+#   if defined(ColorConsole_EXPORTS)
 #       define COLORCONSOLE_API __declspec(dllexport)
 #   else
 #       define COLORCONSOLE_API __declspec(dllimport)

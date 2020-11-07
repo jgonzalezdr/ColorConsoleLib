@@ -67,7 +67,8 @@ set( CONFIG_MSG "${CONFIG_MSG}
 endif()
 
 set( CONFIG_MSG "${CONFIG_MSG}
-    BUILD_SHARED_LIBS:                  ${BUILD_SHARED_LIBS}
+    BUILD_SHARED_LIB:                   ${BUILD_SHARED_LIB}
+    BUILD_STATIC_LIB:                   ${BUILD_STATIC_LIB}
     CI_MODE:                            ${CI_MODE}
 
 Configured Features:
