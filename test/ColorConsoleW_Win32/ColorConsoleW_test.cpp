@@ -32,9 +32,9 @@
 
 TEST_GROUP( ColorConsoleW )
 {
-    ColorConsole::ColorConsoleW* ConstructColorConsoleW( ColorConsole::ConsoleType consoleType )
+    ColorConsole::ConsoleW* ConstructConsoleW( ColorConsole::ConsoleType consoleType )
     {
-        return new ColorConsole::ColorConsoleW( consoleType );
+        return new ColorConsole::ConsoleW( consoleType );
     }
 };
 
@@ -60,7 +60,7 @@ TEST( ColorConsoleW, ConstructorOutput )
     expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
 
     // Exercise
-    ColorConsole::ColorConsoleW* out = ConstructColorConsoleW( ColorConsole::ConsoleType::STD_OUTPUT );
+    ColorConsole::ConsoleW* out = ConstructConsoleW( ColorConsole::ConsoleType::STD_OUTPUT );
 
     // Verify
     mock().checkExpectations();
@@ -230,7 +230,7 @@ TEST( ColorConsoleW, ConstructorError )
     expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
 
     // Exercise
-    ColorConsole::ColorConsoleW* err = ConstructColorConsoleW( ColorConsole::ConsoleType::STD_ERROR );
+    ColorConsole::ConsoleW* err = ConstructConsoleW( ColorConsole::ConsoleType::STD_ERROR );
 
     // Verify
     mock().checkExpectations();

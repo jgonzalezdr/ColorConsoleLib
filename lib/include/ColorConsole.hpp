@@ -27,13 +27,13 @@ namespace ColorConsole
  * Output stream representing a console oriented to narrow characters (of type char)
  * with text colorization capabilities.
  */
-class ColorConsole : public std::ostream
+class COLORCONSOLE_API Console : public std::ostream
 {
 public:
     /**
      * Destructor.
      */
-    ~ColorConsole() noexcept;
+    ~Console() noexcept;
 
     /**
      * Sets (or resets) the console color.
@@ -48,7 +48,7 @@ public:
      * @param color [in] Color to be set, or RESET to reset to default value
      * @return The ColorConsole object (*this)
      */
-    ColorConsole& operator<<( Color color ) noexcept;
+    Console& operator<<( Color color ) noexcept;
 
     /**
      * Inserter for ostream manipulators.
@@ -56,7 +56,7 @@ public:
      * @param pf [in] Manipulator
      * @return The ColorConsole object (*this)
      */
-    ColorConsole& operator<<( std::ostream& (*pf)(std::ostream&) )
+    Console& operator<<( std::ostream& (*pf)(std::ostream&) )
     {
         (*pf)(*this);
         return *this;
@@ -68,21 +68,36 @@ public:
      * @param text [in] Text string
      * @return The ColorConsole object (*this)
      */
-    ColorConsole& operator<<( const char* text )
+    Console& operator<<( const char* text )
     {
         *(static_cast<std::ostream*>(this)) << text;
         return *this;
     }
 
     /**
+     * Returns the console type.
+     * 
+     * @return The console type
+     */
+    ConsoleType get_console_type() const noexcept
+    {
+        return m_consoleType;
+    }
+
+    /**
      * Color-enabled standard output stream (narrow characters oriented).
      */
-    static ColorConsole cout;
+    static Console cout;
 
     /**
      * Color-enabled standard output stream for errors (narrow characters oriented).
      */
-    static ColorConsole cerr;
+    static Console cerr;
+
+    /**
+     * Initializes the consoles.
+     */
+    static void Init();
 
 private:
     /**
@@ -90,7 +105,11 @@ private:
      *
      * @param consoleType [in] Console to colorize
      */
-    ColorConsole( ConsoleType consoleType );
+    Console( ConsoleType consoleType );
+
+    void Initialize();
+
+    ConsoleType m_consoleType;
 
 #ifdef WIN32
     HANDLE m_handle;
@@ -105,12 +124,12 @@ private:
 /**
  * Color-enabled standard output stream (narrow characters oriented).
  */
-extern ColorConsole &cout;
+extern COLORCONSOLE_API Console &cout;
 
 /**
  * Color-enabled standard output stream for errors (narrow characters oriented).
  */
-extern ColorConsole &cerr;
+extern COLORCONSOLE_API Console &cerr;
 
 } // namespace
 

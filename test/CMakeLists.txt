@@ -17,7 +17,9 @@ if( ENABLE_TEST )
 
     if( WIN32 )
         add_subdirectory( ColorConsole_Win32 )
+        add_subdirectory( ColorConsole_Init_Win32 )
         add_subdirectory( ColorConsoleW_Win32 )
+        add_subdirectory( ColorConsoleW_Init_Win32 )
     endif()
 
 endif()

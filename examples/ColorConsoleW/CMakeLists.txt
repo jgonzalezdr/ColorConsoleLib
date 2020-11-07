@@ -51,6 +51,13 @@ set_target_properties( ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} )
 
 target_link_libraries( ${PROJECT_NAME} ColorConsoleLib )
 
+if( BUILD_SHARED_LIBS )
+    add_custom_target( ${PROJECT_NAME}_CopyLibs ALL
+                       DEPENDS ColorConsoleLib
+                       COMMAND cmake -E copy "$<TARGET_FILE:ColorConsoleLib>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
+    add_dependencies( build ${PROJECT_NAME}_CopyLibs ) 
+endif()
+
 #
 # Install
 #

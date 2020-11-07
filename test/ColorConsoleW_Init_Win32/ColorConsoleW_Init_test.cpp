@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief      Unit tests for the ColorConsole class
+ * @brief      Unit tests for the ColorConsoleW class
  * @project    ColorConsoleLib
  * @authors    Jesus Gonzalez <jgonzalez@gdr-sistemas.com>
  * @copyright  Copyright (c) 2020 Jesus Gonzalez. All rights reserved.
@@ -14,9 +14,13 @@
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
 
-#include "ColorConsole.hpp"
+#include "ColorConsoleW.hpp"
 
 #include "Win32_expect.hpp"
+
+#include <fcntl.h>
+#include <io.h>
+#include <stdio.h>
 
 /*===========================================================================
  *                      COMMON TEST DEFINES & MACROS
@@ -26,11 +30,16 @@
  *                          TEST GROUP DEFINITION
  *===========================================================================*/
 
-TEST_GROUP( ColorConsole )
+TEST_GROUP( ColorConsoleW )
 {
-    ColorConsole::Console* ConstructConsole( ColorConsole::ConsoleType consoleType )
+    ColorConsole::ConsoleW* ConstructConsoleW( ColorConsole::ConsoleType consoleType )
     {
-        return new ColorConsole::Console( consoleType );
+        return new ColorConsole::ConsoleW( consoleType );
+    }
+
+    void CallInitialize( ColorConsole::ConsoleW* console )
+    {
+        console->Initialize();
     }
 };
 
@@ -38,23 +47,40 @@ TEST_GROUP( ColorConsole )
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( ColorConsole, Output )
+TEST( ColorConsoleW, Output )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
 
     // Prepare
+
+    // Exercise
+    ColorConsole::ConsoleW* out = ConstructConsoleW( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Initialization
+    //
+
+    // Prepare
+    const int fd = 999773378;
     const HANDLE handle = (HANDLE) 0x1233214;
     const WORD initAttrs = 0xFEAD;
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
 
-    expect::UT_SetConsoleOutputCP( 65001, true );
+    expect::UT_fileno( stdout, fd );
+    expect::UT_setmode( fd, _O_U16TEXT, 0 );
     expect::UT_GetStdHandle( STD_OUTPUT_HANDLE, handle );
     expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
 
     // Exercise
-    ColorConsole::Console* out = ConstructConsole( ColorConsole::ConsoleType::STD_OUTPUT );
+    CallInitialize( out );
 
     // Verify
     mock().checkExpectations();
@@ -206,22 +232,40 @@ TEST( ColorConsole, Output )
     // Cleanup
 }
 
-TEST( ColorConsole, Error )
+TEST( ColorConsoleW, Error )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
 
     // Prepare
+
+    // Exercise
+    ColorConsole::ConsoleW* err = ConstructConsoleW( ColorConsole::ConsoleType::STD_ERROR );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Initialization
+    //
+
+    // Prepare
+    const int fd = 12967493;
     const HANDLE handle = (HANDLE) 0xFE33214;
     const WORD initAttrs = 0x12AF;
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
 
+    expect::UT_fileno( stderr, fd );
+    expect::UT_setmode( fd, _O_U16TEXT, 0 );
     expect::UT_GetStdHandle( STD_ERROR_HANDLE, handle );
     expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
 
     // Exercise
-    ColorConsole::Console* err = ConstructConsole( ColorConsole::ConsoleType::STD_ERROR );
+    CallInitialize( err );
 
     // Verify
     mock().checkExpectations();
@@ -238,6 +282,150 @@ TEST( ColorConsole, Error )
 
     // Exercise
     *err << ColorConsole::Color::FG_LIGHT_RED;
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+    expect::UT_SetConsoleTextAttribute( handle, initAttrs, true );
+
+    // Exercise
+    delete err;
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+}
+
+TEST( ColorConsoleW, Output_DoubleInit )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::ConsoleW* out = ConstructConsoleW( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // First Initialization
+    //
+
+    // Prepare
+    const int fd = 987763;
+    const HANDLE handle = (HANDLE) 0x1233214;
+    const WORD initAttrs = 0xFEAD;
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
+
+    expect::UT_fileno( stdout, fd );
+    expect::UT_setmode( fd, _O_U16TEXT, 0 );
+    expect::UT_GetStdHandle( STD_OUTPUT_HANDLE, handle );
+    expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
+
+    // Exercise
+    CallInitialize( out );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Second Initialization
+    //
+
+    // Prepare
+
+    // Exercise
+    CallInitialize( out );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+    expect::UT_SetConsoleTextAttribute( handle, initAttrs, true );
+
+    // Exercise
+    delete out;
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+}
+
+TEST( ColorConsoleW, Error_DoubleInit )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::ConsoleW* err = ConstructConsoleW( ColorConsole::ConsoleType::STD_ERROR );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // First Initialization
+    //
+
+    // Prepare
+    const int fd = 1289946;
+    const HANDLE handle = (HANDLE) 0xFE33214;
+    const WORD initAttrs = 0x12AF;
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
+
+    expect::UT_fileno( stderr, fd );
+    expect::UT_setmode( fd, _O_U16TEXT, 0 );
+    expect::UT_GetStdHandle( STD_ERROR_HANDLE, handle );
+    expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
+
+    // Exercise
+    CallInitialize( err );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Second Initialization
+    //
+
+    // Prepare
+
+    // Exercise
+    CallInitialize( err );
 
     // Verify
     mock().checkExpectations();

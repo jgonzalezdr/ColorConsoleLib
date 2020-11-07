@@ -32,6 +32,11 @@ TEST_GROUP( ColorConsole )
     {
         return new ColorConsole::Console( consoleType );
     }
+
+    void CallInitialize( ColorConsole::Console* console )
+    {
+        console->Initialize();
+    }
 };
 
 /*===========================================================================
@@ -45,6 +50,21 @@ TEST( ColorConsole, Output )
     //
 
     // Prepare
+
+    // Exercise
+    ColorConsole::Console* out = ConstructConsole( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Initialization
+    //
+
+    // Prepare
     const HANDLE handle = (HANDLE) 0x1233214;
     const WORD initAttrs = 0xFEAD;
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
@@ -54,7 +74,7 @@ TEST( ColorConsole, Output )
     expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
 
     // Exercise
-    ColorConsole::Console* out = ConstructConsole( ColorConsole::ConsoleType::STD_OUTPUT );
+    CallInitialize( out );
 
     // Verify
     mock().checkExpectations();
@@ -213,6 +233,21 @@ TEST( ColorConsole, Error )
     //
 
     // Prepare
+
+    // Exercise
+    ColorConsole::Console* err = ConstructConsole( ColorConsole::ConsoleType::STD_ERROR );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Initialization
+    //
+
+    // Prepare
     const HANDLE handle = (HANDLE) 0xFE33214;
     const WORD initAttrs = 0x12AF;
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
@@ -221,7 +256,7 @@ TEST( ColorConsole, Error )
     expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
 
     // Exercise
-    ColorConsole::Console* err = ConstructConsole( ColorConsole::ConsoleType::STD_ERROR );
+    CallInitialize( err );
 
     // Verify
     mock().checkExpectations();
@@ -238,6 +273,145 @@ TEST( ColorConsole, Error )
 
     // Exercise
     *err << ColorConsole::Color::FG_LIGHT_RED;
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+    expect::UT_SetConsoleTextAttribute( handle, initAttrs, true );
+
+    // Exercise
+    delete err;
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+}
+
+TEST( ColorConsole, Output_DoubleInit )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::Console* out = ConstructConsole( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // First Initialization
+    //
+
+    // Prepare
+    const HANDLE handle = (HANDLE) 0x1233214;
+    const WORD initAttrs = 0xFEAD;
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
+
+    expect::UT_SetConsoleOutputCP( 65001, true );
+    expect::UT_GetStdHandle( STD_OUTPUT_HANDLE, handle );
+    expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
+
+    // Exercise
+    CallInitialize( out );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Second Initialization
+    //
+
+    // Prepare
+
+    // Exercise
+    CallInitialize( out );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+    expect::UT_SetConsoleTextAttribute( handle, initAttrs, true );
+
+    // Exercise
+    delete out;
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+}
+
+TEST( ColorConsole, Error_DoubleInit )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::Console* err = ConstructConsole( ColorConsole::ConsoleType::STD_ERROR );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // First Initialization
+    //
+
+    // Prepare
+    const HANDLE handle = (HANDLE) 0xFE33214;
+    const WORD initAttrs = 0x12AF;
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo = { {0, 0}, {0, 0}, initAttrs };
+
+    expect::UT_GetStdHandle( STD_ERROR_HANDLE, handle );
+    expect::UT_GetConsoleScreenBufferInfo( handle, &consoleInfo, true );
+
+    // Exercise
+    CallInitialize( err );
+
+    // Verify
+    mock().checkExpectations();
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Second Initialization
+    //
+
+    // Prepare
+
+    // Exercise
+    CallInitialize( err );
 
     // Verify
     mock().checkExpectations();

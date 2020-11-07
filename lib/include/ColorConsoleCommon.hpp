@@ -12,6 +12,16 @@
 
 #include <iostream>
 
+#if defined(WIN32) && defined(COLORCONSOLE_SHARED_LIB)
+#   if defined(ColorConsoleLib_EXPORTS)
+#       define COLORCONSOLE_API __declspec(dllexport)
+#   else
+#       define COLORCONSOLE_API __declspec(dllimport)
+#   endif
+#else
+#   define COLORCONSOLE_API
+#endif
+
 namespace ColorConsole
 {
 

@@ -17,6 +17,8 @@ int wmain( int argc, const wchar_t* argv[] )
 int main( int argc, const char* argv[] )
 #endif
 {
+    ConsoleW::Init();
+
     wcout << "wcout: Initial color (non-colorized)" << endl << endl;
 
     wcout << Color::FG_LIGHT_BLUE;

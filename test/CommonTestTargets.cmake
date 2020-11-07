@@ -106,7 +106,7 @@ if( COVERAGE AND MSVC )
     endif()
 
     set( OPENCPPCOV_ARGS --cover_children )
-    set( COVSRC_PATH ${CMAKE_SOURCE_DIR}/app/sources/* )
+    set( COVSRC_PATH ${CMAKE_SOURCE_DIR}/lib/sources/* )
 
     if( NOT COVERAGE_VERBOSE )
         set( OPENCPPCOV_ARGS -q ${OPENCPPCOV_ARGS} )

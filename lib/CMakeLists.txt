@@ -2,6 +2,9 @@ cmake_minimum_required( VERSION 3.13 )
 
 project( ColorConsoleLib VERSION 1.0.0 )
 
+option( BUILD_SHARED_LIBS "Build shared library" ON )
+option( REQUIRE_INITIALIZATION "Make initialization mandatory" ON )
+
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
 
 if( MSVC )
@@ -68,7 +71,17 @@ if( MSVC )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc" )
 endif()
 
-add_library( ${PROJECT_NAME} ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
+if ( BUILD_SHARED_LIBS )
+    add_library( ${PROJECT_NAME} SHARED ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
+    target_compile_definitions( ${PROJECT_NAME} PUBLIC "COLORCONSOLE_SHARED_LIB" )
+else()
+    add_library( ${PROJECT_NAME} STATIC ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
+endif()
+
+if( REQUIRE_INITIALIZATION OR (WIN32 AND BUILD_SHARED_LIBS) )
+    target_compile_definitions( ${PROJECT_NAME} PRIVATE "COLORCONSOLE_REQUIRE_INITIALIZATION" )
+endif()
+
 
 target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
 

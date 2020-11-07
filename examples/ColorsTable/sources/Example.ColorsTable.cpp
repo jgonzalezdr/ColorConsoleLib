@@ -13,6 +13,8 @@ using namespace ColorConsole;
 
 int main( int argc, const char* argv[] )
 {
+    Console::Init();
+
     cout << Color::FG_WHITE;
     cout << "      FG_WHITE      ";
     cout << (Color::BG_WHITE|Color::FG_BLACK);

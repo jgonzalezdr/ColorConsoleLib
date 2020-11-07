@@ -29,13 +29,13 @@ namespace ColorConsole
  * Output stream representing a console oriented to wide characters (of type wchar_t)
  * with text colorization capabilities.
  */
-class ColorConsoleW : public std::wostream
+class COLORCONSOLE_API ConsoleW : public std::wostream
 {
 public:
     /**
      * Destructor.
      */
-    ~ColorConsoleW() noexcept;
+    ~ConsoleW() noexcept;
 
     /**
      * Sets (or resets) the console color.
@@ -50,7 +50,7 @@ public:
      * @param color [in] Color to be set, or RESET to reset to default value
      * @return The ColorConsoleW object (*this)
      */
-    ColorConsoleW& operator<<( Color color ) noexcept;
+    ConsoleW& operator<<( Color color ) noexcept;
 
     /**
      * Inserter for ostream manipulators.
@@ -58,7 +58,7 @@ public:
      * @param pf [in] Manipulator
      * @return The ColorConsoleW object (*this)
      */
-    ColorConsoleW& operator<<( std::wostream& (*pf)(std::wostream&) )
+    ConsoleW& operator<<( std::wostream& (*pf)(std::wostream&) )
     {
         (*pf)(*this);
         return *this;
@@ -70,21 +70,36 @@ public:
      * @param text [in] Text string
      * @return The ColorConsoleW object (*this)
      */
-    ColorConsoleW& operator<<( const wchar_t* text )
+    ConsoleW& operator<<( const wchar_t* text )
     {
         *(static_cast<std::wostream*>(this)) << text;
         return *this;
     }
 
     /**
+     * Returns the console type.
+     * 
+     * @return The console type
+     */
+    ConsoleType get_console_type() const noexcept
+    {
+        return m_consoleType;
+    }
+
+    /**
      * Color-enabled standard output stream (wide characters oriented).
      */
-    static ColorConsoleW wcout;
+    static ConsoleW wcout;
 
     /**
      * Color-enabled standard output stream for errors (wide characters oriented).
      */
-    static ColorConsoleW wcerr;
+    static ConsoleW wcerr;
+
+    /**
+     * Initializes the consoles.
+     */
+    static void Init();
 
 private:
     /**
@@ -92,7 +107,11 @@ private:
      *
      * @param consoleType [in] Console to colorize
      */
-    ColorConsoleW( ConsoleType consoleType );
+    ConsoleW( ConsoleType consoleType );
+
+    void Initialize();
+
+    ConsoleType m_consoleType;
 
 #ifdef WIN32
     HANDLE m_handle;
@@ -107,12 +126,12 @@ private:
 /**
  * Color-enabled standard output stream (wide characters oriented).
  */
-extern ColorConsoleW &wcout;
+extern COLORCONSOLE_API ConsoleW &wcout;
 
 /**
  * Color-enabled standard output stream for errors (wide characters oriented).
  */
-extern ColorConsoleW &wcerr;
+extern COLORCONSOLE_API ConsoleW &wcerr;
 
 } // namespace
 

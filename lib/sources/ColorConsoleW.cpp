@@ -38,29 +38,39 @@ namespace ColorConsole
 {
 
 #ifndef UNIT_TEST
-ColorConsoleW &wcout = ColorConsoleW::wcout;
-ColorConsoleW &wcerr = ColorConsoleW::wcerr;
+ConsoleW &wcout = ConsoleW::wcout;
+ConsoleW &wcerr = ConsoleW::wcerr;
 
-ColorConsoleW ColorConsoleW::wcout( ConsoleType::STD_OUTPUT );
-ColorConsoleW ColorConsoleW::wcerr( ConsoleType::STD_ERROR );
+ConsoleW ConsoleW::wcout( ConsoleType::STD_OUTPUT );
+ConsoleW ConsoleW::wcerr( ConsoleType::STD_ERROR );
 #endif
 
-ColorConsoleW::ColorConsoleW( ConsoleType consoleType )
-: std::wostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::wcerr.rdbuf() : std::wcout.rdbuf() )
+// LCOV_EXCL_START
+void ConsoleW::Init()
 {
-#ifdef WIN32
-    _setmode( _fileno( ( consoleType == ConsoleType::STD_ERROR ) ? stderr : stdout ), _O_U16TEXT );
+#if defined(COLORCONSOLE_REQUIRE_INITIALIZATION) && !defined(UNIT_TEST)
+    wcout.Initialize();
+    wcerr.Initialize();
+#endif
+}
+// LCOV_EXCL_STOP
 
-    m_handle = GetStdHandle( ( consoleType == ConsoleType::STD_ERROR ) ? STD_ERROR_HANDLE : STD_OUTPUT_HANDLE );
+ConsoleW::ConsoleW( ConsoleType consoleType )
+#ifdef COLORCONSOLE_REQUIRE_INITIALIZATION
+: std::wostream( NULL )
+#else
+: std::wostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::wcerr.rdbuf() : std::wcout.rdbuf() )
+#endif
+{
+    m_handle = INVALID_HANDLE_VALUE;
+    m_consoleType = consoleType;
 
-    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-    GetConsoleScreenBufferInfo( m_handle, &consoleInfo );
-
-    m_origConsoleAttrs = consoleInfo.wAttributes;
+#ifndef COLORCONSOLE_REQUIRE_INITIALIZATION
+    Initialize();
 #endif
 }
 
-ColorConsoleW::~ColorConsoleW() noexcept
+ConsoleW::~ConsoleW() noexcept
 {
 #ifdef WIN32
     flush();
@@ -68,13 +78,37 @@ ColorConsoleW::~ColorConsoleW() noexcept
 #endif
 }
 
-ColorConsoleW& ColorConsoleW::operator<<( Color color ) noexcept
+void ConsoleW::Initialize()
+{
+#ifdef COLORCONSOLE_REQUIRE_INITIALIZATION
+    if( rdbuf() == NULL )
+    {
+        init( ( m_consoleType == ConsoleType::STD_ERROR ) ? std::wcerr.rdbuf() : std::wcout.rdbuf() );
+    }
+#endif
+
+#ifdef WIN32
+    if( m_handle == INVALID_HANDLE_VALUE )
+    {
+        _setmode( _fileno( ( m_consoleType == ConsoleType::STD_ERROR ) ? stderr : stdout ), _O_U16TEXT );
+
+        m_handle = GetStdHandle( ( m_consoleType == ConsoleType::STD_ERROR ) ? STD_ERROR_HANDLE : STD_OUTPUT_HANDLE );
+
+        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+        GetConsoleScreenBufferInfo( m_handle, &consoleInfo );
+
+        m_origConsoleAttrs = consoleInfo.wAttributes;
+    }
+#endif
+}
+
+ConsoleW& ConsoleW::operator<<( Color color ) noexcept
 {
     set_color( color );
     return *this;
 }
 
-void ColorConsoleW::set_color( Color color ) noexcept
+void ConsoleW::set_color( Color color ) noexcept
 {
 #ifdef WIN32
     flush();

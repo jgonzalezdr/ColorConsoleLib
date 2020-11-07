@@ -13,6 +13,8 @@ using namespace ColorConsole;
 
 int main( int argc, const char* argv[] )
 {
+    Console::Init();
+
     cout << "cout: Initial color (non-colorized)" << endl << endl;
 
     cout << Color::FG_LIGHT_BLUE;
