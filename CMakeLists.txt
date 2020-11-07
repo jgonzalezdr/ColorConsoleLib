@@ -77,6 +77,7 @@ Configured Features:
     COVERAGE_VERBOSE:                   ${COVERAGE_VERBOSE}
     ENABLE_INSTALLER:                   ${ENABLE_INSTALLER}
     BUILD_EXAMPLES:                     ${BUILD_EXAMPLES}
+    INSTALL_EXAMPLES:                   ${INSTALL_EXAMPLES}
 
 --------------------------------------------------------------------------
 " )

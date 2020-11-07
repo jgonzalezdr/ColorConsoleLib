@@ -44,9 +44,13 @@ endif()
 
 include( GenerateProductVersion )
 
+if( WIN32 )
+    set( PROJECT_NAME_SUFFIX "-${CMAKE_CXX_COMPILER_ID}" )
+endif()
+
 generate_product_version(
     PRODUCT_VERSION_FILES
-    NAME ${PROJECT_NAME}
+    NAME ${PROJECT_NAME}${PROJECT_NAME_SUFFIX}
     FILE_DESCRIPTION "Color Console Library"
     VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
     VERSION_MINOR ${PROJECT_VERSION_MINOR}

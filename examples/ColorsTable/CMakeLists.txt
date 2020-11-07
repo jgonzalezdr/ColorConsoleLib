@@ -60,4 +60,6 @@ endif()
 # Install
 #
 
-install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION examples )
+if( INSTALL_EXAMPLES )
+    install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION examples )
+endif()
