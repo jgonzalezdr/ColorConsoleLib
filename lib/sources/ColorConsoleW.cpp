@@ -62,8 +62,11 @@ ConsoleW::ConsoleW( ConsoleType consoleType )
 : std::wostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::wcerr.rdbuf() : std::wcout.rdbuf() )
 #endif
 {
-    m_handle = INVALID_HANDLE_VALUE;
     m_consoleType = consoleType;
+
+#ifdef WIN32
+    m_handle = INVALID_HANDLE_VALUE;
+#endif
 
 #ifndef COLORCONSOLE_REQUIRE_INITIALIZATION
     Initialize();

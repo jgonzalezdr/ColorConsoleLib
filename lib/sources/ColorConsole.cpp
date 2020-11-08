@@ -53,8 +53,11 @@ Console::Console( ConsoleType consoleType )
 : std::ostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::cerr.rdbuf() : std::cout.rdbuf() )
 #endif
 {
-    m_handle = INVALID_HANDLE_VALUE;
     m_consoleType = consoleType;
+
+#ifdef WIN32
+    m_handle = INVALID_HANDLE_VALUE;
+#endif
 
 #ifndef COLORCONSOLE_REQUIRE_INITIALIZATION
     Initialize();
