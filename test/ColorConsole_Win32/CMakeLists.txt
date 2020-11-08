@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.3 )
 
-project( Test.ColorConsole )
+project( Test.ColorConsole.Win32 )
 
 #
 # Test configuration
@@ -27,7 +27,7 @@ set( PROD_SRC_FILES
 # Add your test source files to the following list
 #
 set( TEST_SRC_FILES
-     ColorConsole_test.cpp
+     ColorConsole_Win32_test.cpp
      ${MOCKS_DIR}/Win32_mock.cpp
      ${MOCKS_DIR}/Win32_expect.cpp
 )
