@@ -43,6 +43,8 @@ int main( int argc, const char* argv[] )
     cout << Color::FG_BROWN;
     cout << "cout: Brown" << endl;
 
+    cerr << Color::FG_BLACK;
+    cerr << "cerr: Black" << endl;
     cout << Color::FG_DARK_GREY;
     cout << "cout: Dark grey" << endl;
     cout << Color::FG_LIGHT_GREY;
@@ -51,7 +53,7 @@ int main( int argc, const char* argv[] )
     cout << "cout: White" << endl;
 
     cerr << endl;
-    
+
     cerr << (Color::FG_LIGHT_BLUE | Color::BG_WHITE);
     cerr << "cerr: Light blue over white" << endl;
     cerr << (Color::FG_WHITE | Color::BG_LIGHT_BLUE);
@@ -83,9 +85,10 @@ int main( int argc, const char* argv[] )
     cerr << "cerr: Yellow over brown" << endl;
     cerr << (Color::FG_DARK_BLUE | Color::BG_DARK_GREY);
     cerr << "cerr: Dark blue over dark grey" << endl;
-
-    cerr << Color::FG_BLACK;
-    cerr << "cerr: Black" << endl;
+    cerr << (Color::FG_LIGHT_GREEN | Color::BG_BLACK);
+    cerr << "cerr: Light green over black" << endl;
+    cerr << (Color::FG_LIGHT_BLUE | Color::BG_NONE);
+    cerr << "cerr: Light blue over none" << endl;
 
     cout << Color::RESET;
     cout << endl;
@@ -94,7 +97,7 @@ int main( int argc, const char* argv[] )
 
     cout << endl;
     cerr << "cerr: Extended chars àêé·çÇñÑ" << endl;
-    cout << "cout: Extended chars ® ¶ Æ ß ø ‡ àêé·çÇñÑ";
+    cout << "cout: Extended chars ® ¶ Æ ß ø ‡ àêé·çÇñÑ" << endl;
 
     return 0;
 }

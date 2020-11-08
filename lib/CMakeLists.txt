@@ -32,6 +32,7 @@ set( INC_LIST
      include/ColorConsoleCommon.hpp
      include/ColorConsole.hpp
      include/ColorConsoleW.hpp
+     sources/ColorConsoleHelpers.hpp
 )
 
 #
@@ -132,10 +133,15 @@ endif()
 include( InstallersSetup.cmake )
 
 if ( BUILD_SHARED_LIB )
-    install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib )
+    if( WIN32 )
+        install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib )
+        install( TARGETS ${PROJECT_NAME} ARCHIVE DESTINATION lib )
+    else()
+        install( TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib )
+    endif()
 endif()
 if ( BUILD_STATIC_LIB )
-    install( TARGETS ${PROJECT_NAME}_static RUNTIME DESTINATION lib )
+    install( TARGETS ${PROJECT_NAME}_static ARCHIVE DESTINATION lib )
 endif()
 
-install( DIRECTORY include/ DESTINATION include ) 
+install( DIRECTORY include/ DESTINATION include )

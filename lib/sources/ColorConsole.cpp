@@ -9,6 +9,8 @@
 
 #include "ColorConsole.hpp"
 
+#include "ColorConsoleHelpers.hpp"
+
 #ifdef UNIT_TEST
 
 #define GetStdHandle UT_GetStdHandle
@@ -118,6 +120,8 @@ void Console::set_color( Color color ) noexcept
     {
         SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
     }
+#else
+    setAnsiColor( this, color );
 #endif
 }
 

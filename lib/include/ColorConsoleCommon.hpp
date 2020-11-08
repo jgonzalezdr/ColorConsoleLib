@@ -36,7 +36,7 @@ enum class ConsoleType
 
 /**
  * Console color.
- * 
+ *
  * One foreground and one background color can be combined ORing them.
  */
 enum class Color
@@ -77,7 +77,8 @@ enum class Color
     BG_LIGHT_MAGENTA = 0xD0,  ///< Light magenta background
     BG_YELLOW = 0xE0,         ///< Yellow background
     BG_WHITE = 0xF0,          ///< White background
-    RESET = 0x10000           ///< Reset to initial setting
+    BG_BLACK = 0x10000,       ///< Black background
+    RESET = 0x20000           ///< Reset to initial setting
 };
 
 /**
@@ -89,11 +90,14 @@ inline Color operator|(Color a, Color b)
 }
 
 /**
- * Newline and flush manipulator (redefined from std namespace for convenience).
+ * Newline and flush manipulator.
  */
 template <class _Elem, class _Traits>
 std::basic_ostream<_Elem, _Traits>& endl( std::basic_ostream<_Elem, _Traits>& str )
 {
+ #ifndef WIN32
+    str << "\e[K";
+ #endif
     return std::endl( str );
 }
 

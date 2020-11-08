@@ -9,6 +9,8 @@
 
 #include "ColorConsoleW.hpp"
 
+#include "ColorConsoleHelpers.hpp"
+
 #ifdef WIN32
 #include <fcntl.h>
 #include <io.h>
@@ -102,6 +104,8 @@ void ConsoleW::Initialize()
 
         m_origConsoleAttrs = consoleInfo.wAttributes;
     }
+#else
+    std::setlocale(LC_ALL, "");
 #endif
 }
 
@@ -124,6 +128,8 @@ void ConsoleW::set_color( Color color ) noexcept
     {
         SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
     }
+#else
+    setAnsiColor( this, color );
 #endif
 }
 

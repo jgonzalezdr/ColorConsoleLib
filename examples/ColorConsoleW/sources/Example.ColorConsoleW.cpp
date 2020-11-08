@@ -47,6 +47,8 @@ int main( int argc, const char* argv[] )
     wcout << Color::FG_BROWN;
     wcout << "wcout: Brown" << endl;
 
+    wcerr << Color::FG_BLACK;
+    wcerr << "wcerr: Black" << endl;
     wcout << Color::FG_DARK_GREY;
     wcout << "wcout: Dark grey" << endl;
     wcout << Color::FG_LIGHT_GREY;
@@ -55,7 +57,7 @@ int main( int argc, const char* argv[] )
     wcout << "wcout: White" << endl;
 
     wcerr << endl;
-    
+
     wcerr << (Color::FG_LIGHT_BLUE | Color::BG_WHITE);
     wcerr << "wcerr: Light blue over white" << endl;
     wcerr << (Color::FG_WHITE | Color::BG_LIGHT_BLUE);
@@ -87,9 +89,10 @@ int main( int argc, const char* argv[] )
     wcerr << "wcerr: Yellow over brown" << endl;
     wcerr << (Color::FG_DARK_BLUE | Color::BG_DARK_GREY);
     wcerr << "wcerr: Dark blue over dark grey" << endl;
-
-    wcerr << Color::FG_BLACK;
-    wcerr << "wcerr: Black" << endl;
+    wcerr << (Color::FG_LIGHT_GREEN | Color::BG_BLACK);
+    wcerr << "cerr: Light green over black" << endl;
+    wcerr << (Color::FG_LIGHT_BLUE | Color::BG_NONE);
+    wcerr << "cerr: Light blue over none" << endl;
 
     wcout << Color::RESET;
     wcout << endl;
@@ -98,7 +101,7 @@ int main( int argc, const char* argv[] )
 
     wcout << endl;
     wcerr << L"wcerr: Unicode chars \u2192 \u00AE \u00B6 \u00C6 \u00DF \u00F8 \u03A3 \u03FE \u2021 àêé·çÇñÑ" << endl;
-    wcout << L"wcout: Unicode chars → ® ¶ Æ ß ø Σ Ͼ ‡ àêé·çÇñÑ";
+    wcout << L"wcout: Unicode chars → ® ¶ Æ ß ø Σ Ͼ ‡ àêé·çÇñÑ" << endl;
 
     return 0;
 }
