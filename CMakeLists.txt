@@ -78,6 +78,7 @@ Configured Features:
     ENABLE_INSTALLER:                   ${ENABLE_INSTALLER}
     BUILD_EXAMPLES:                     ${BUILD_EXAMPLES}
     INSTALL_EXAMPLES:                   ${INSTALL_EXAMPLES}
+    FORCE_ANSI_ESCAPE_CODES:            ${FORCE_ANSI_ESCAPE_CODES}
 
 --------------------------------------------------------------------------
 " )

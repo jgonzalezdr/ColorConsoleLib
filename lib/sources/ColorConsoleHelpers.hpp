@@ -30,11 +30,11 @@ void setAnsiColor( Stream *out, Color color )
 {
     if( color >= Color::RESET )
     {
-        *out << "\033[0m";
+        *out << "\e[0m";
     }
     else
     {
-        *out << "\033[";
+        *out << "\e[";
 
         Color bg_color = ( color & (Color::BG_LIGHT_RED|Color::BG_LIGHT_GREEN|Color::BG_LIGHT_BLUE) );
 

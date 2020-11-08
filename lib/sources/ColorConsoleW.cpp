@@ -17,7 +17,7 @@
 #include <stdio.h>
 #endif
 
-#ifdef UNIT_TEST
+#if defined(WIN32) && defined(UNIT_TEST)
 
 #define GetStdHandle UT_GetStdHandle
 HANDLE UT_GetStdHandle( DWORD nStdHandle );
@@ -34,7 +34,7 @@ int UT_setmode( int _FileHandle, int _Mode );
 #define _fileno UT_fileno
 int UT_fileno( FILE* _Stream );
 
-#endif // UNIT_TEST
+#endif // WIN32 && UNIT_TEST
 
 namespace ColorConsole
 {
@@ -77,9 +77,11 @@ ConsoleW::ConsoleW( ConsoleType consoleType )
 
 ConsoleW::~ConsoleW() noexcept
 {
-#ifdef WIN32
+#if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
     flush();
     SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+#else
+    setAnsiColor( this, Color::RESET );
 #endif
 }
 
@@ -117,7 +119,7 @@ ConsoleW& ConsoleW::operator<<( Color color ) noexcept
 
 void ConsoleW::set_color( Color color ) noexcept
 {
-#ifdef WIN32
+#if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
     flush();
 
     if( color >= Color::RESET )
