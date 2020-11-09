@@ -4,6 +4,14 @@ environment:
   matrix:
   - Platform: LINUX-GCC
     GccVersion: 9
+    Configuration: Coverage
+    APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+  - Platform: TDM-GCC-64
+    PlatformToolset: 9.2.0
+    Configuration: Coverage
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+  - Platform: LINUX-GCC
+    GccVersion: 9
     Configuration: Release
     GenerateInstaller: True
     PublishArtifacts: True
@@ -41,10 +49,6 @@ environment:
   # - Platform: MSVC64
   #   Configuration: Release
   #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - Platform: TDM-GCC-64
-    PlatformToolset: 9.2.0
-    Configuration: Coverage
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
 for:
   -
@@ -56,6 +60,7 @@ for:
     environment:
       CPPUTEST_HOME: C:\cpputest-3.9.alpha0
       LCOV_HOME: C:\lcov-1.15.alpha1w
+      CODECOV_FLAG: --flag
     cache:
       - C:\cpputest-3.9.alpha0 -> appveyor.yml
       - C:\Strawberry
@@ -65,7 +70,7 @@ for:
       - ps: if (!($env:Test -eq 'False') -and !(Test-Path -Path "$env:CPPUTEST_HOME")) { ci\appveyor_ci_install_cpputest_win.ps1 }
       - ps: if ($env:Platform -eq 'TDM-GCC-64' -and !(Test-Path -Path "C:\TDM-GCC-64")) { choco install tdm-gcc-64 --version $env:PlatformToolset -r --no-progress -s ci\ }
       - ps: if ($env:Configuration -eq 'Coverage' -and !(Test-Path -Path "C:\Strawberry")) { choco install strawberryperl -r --no-progress }
-      - ps: if ($env:Configuration -eq 'Coverage' -and !(Test-Path -Path "$env:LCOV_HOME")) { ci\appveyor_ci_install_lcov.ps1 }
+      - ps: if ($env:Configuration -eq 'Coverage' -and !(Test-Path -Path "$env:LCOV_HOME")) { ci\appveyor_ci_install_lcov_win.ps1 }
       - ps: if ($env:Configuration -eq 'Coverage') { choco install codecov --version 1.11.2 -r --no-progress }
       - cmd: set PATH=C:\Strawberry\perl\bin;%PATH%
   -
@@ -74,13 +79,17 @@ for:
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
     environment:
       CPPUTEST_HOME: /home/appveyor/cpputest-3.9.alpha0
-      LCOV_HOME: /home/appveyor/lcov-1.15.alpha1w
+      LCOV_HOME: /home/appveyor/lcov-1.15
+      CODECOV_HOME: /home/appveyor/codecov
+      CODECOV_FLAG: -F
     cache:
       - /home/appveyor/cpputest-3.9.alpha0 -> appveyor.yml
-      - /home/appveyor/lcov-1.15.alpha1w -> appveyor.yml
+      - /home/appveyor/lcov-1.15 -> appveyor.yml
     install:
       - ps: if (!($env:Test -eq 'False') -and !(Test-Path -Path "$env:CPPUTEST_HOME")) { ci/appveyor_ci_install_cpputest_linux.ps1 }
-      - ps: if ($env:Configuration -eq 'Coverage' -and !(Test-Path -Path "$env:LCOV_HOME")) { ci/appveyor_ci_install_lcov.ps1 }
+      - ps: if ($env:Configuration -eq 'Coverage' -and !(Test-Path -Path "$env:LCOV_HOME")) { ci/appveyor_ci_install_lcov_linux.ps1 }
+      - ps: if ($env:Configuration -eq 'Coverage') { bash ci/appveyor_ci_install_codecov_linux.sh }
+      - export PATH=$CODECOV_HOME:$PATH
 
 before_build:
   - git submodule update --init --recursive
@@ -93,4 +102,4 @@ test_script:
 
 after_test:
   - ps: ci/appveyor_ci_after_test.ps1
-  - ps: if ($env:Configuration -eq 'Coverage') { codecov -f build\test\reports\coverage\app_stripped.info }
+  - ps: if ($env:Configuration -eq 'Coverage') { codecov -f build/test/reports/coverage/app_stripped.info $env:CODECOV_FLAG $env:Platform }

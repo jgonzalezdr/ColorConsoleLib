@@ -24,7 +24,7 @@ $test = if ($env:Test -eq 'False') {'OFF'} else {'ON'}
 
 $cmake_options = "-DCI_MODE=ON -DENABLE_TEST=$test"
 
-if( $test -eq 'ON')
+if( $test -eq 'ON' )
 {
     $cmake_options += " -DCOVERAGE=$coverage"
 }
@@ -93,7 +93,7 @@ switch -Wildcard ($env:Platform)
     {
         $cmake_options += " -DCMAKE_C_COMPILER=gcc-$env:GccVersion -DCMAKE_CXX_COMPILER=g++-$env:GccVersion"
         
-        Invoke-Command "cmake .. $cmake_options" "$build_dir"
+        Invoke-Command "cmake .. $cmake_options -DCMAKE_BUILD_TYPE=$build_config" "$build_dir"
         Invoke-Command "make" "$build_dir"
     }
 	

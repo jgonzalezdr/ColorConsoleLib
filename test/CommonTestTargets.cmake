@@ -31,13 +31,21 @@ if( COVERAGE AND NOT MSVC )
         endif()
     endif()
 
-    set( LCOV_ARGS --rc lcov_branch_coverage=1 --rc geninfo_no_exception_branch=1 )
+    set( LCOV_COMMON_ARGS --rc lcov_branch_coverage=1 --rc geninfo_no_exception_branch=1 )
 
     set( COVSRC_DIR ${CMAKE_SOURCE_DIR} )
 
     if( NOT COVERAGE_VERBOSE )
-        set( LCOV_ARGS -q ${LCOV_ARGS} )
+        set( LCOV_COMMON_ARGS -q ${LCOV_COMMON_ARGS} )
     endif()
+
+    if( NOT WIN32 )
+        string( REPLACE "gcc" "gcov" GCOV_TOOL ${CMAKE_C_COMPILER} )
+        set( LCOV_ARGS --gcov-tool ${GCOV_TOOL} ${LCOV_ARGS} )
+    endif()
+
+    set( LCOV_ARGS ${LCOV_ARGS} ${LCOV_COMMON_ARGS} )
+    set( GENHTML_ARGS ${GENHTML_ARGS} ${LCOV_COMMON_ARGS} )
 
     if( NOT COVERAGE_INCLUDED )
         set( COVERAGE_INCLUDED \"*/lib/sources/*\" )
@@ -51,7 +59,7 @@ if( COVERAGE AND NOT MSVC )
     add_custom_target( coverage_initial
                        COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -c -i --no-external -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_base.info
                        DEPENDS coverage_clean )
-                       
+
     add_custom_target( coverage_run_tests
                        COMMAND ctest -V ${IGNORE_ERROR}
                        DEPENDS coverage_initial )
@@ -79,7 +87,7 @@ if( COVERAGE AND NOT MSVC )
     endif()
 
     add_custom_target( coverage_report
-                       COMMAND ${PERL_EXECUTABLE} ${GENHTML_EXECUTABLE} ${LCOV_ARGS} -s ${COVDST_DIR}/app_stripped.info -o ${COVDST_DIR} --demangle-cpp --title "Unit Tests" --rc genhtml_charset=cp-1252
+                       COMMAND ${PERL_EXECUTABLE} ${GENHTML_EXECUTABLE} ${GENHTML_ARGS} -s ${COVDST_DIR}/app_stripped.info -o ${COVDST_DIR} --demangle-cpp --title "Unit Tests" --rc genhtml_charset=cp-1252
                        DEPENDS coverage_process )
 
 endif()
