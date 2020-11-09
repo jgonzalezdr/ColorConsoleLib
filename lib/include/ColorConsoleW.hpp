@@ -12,8 +12,6 @@
 
 #include "ColorConsoleCommon.hpp"
 
-#include <iostream>
-
 #ifdef WIN32
 #include "windows.h"
 #endif
@@ -35,14 +33,14 @@ public:
     /**
      * Destructor.
      */
-    ~ConsoleW() noexcept;
+    ~ConsoleW();
 
     /**
      * Sets (or resets) the console color.
      *
      * @param color [in] Color to be set, or RESET to reset to default value
      */
-    void set_color( Color color ) noexcept;
+    void set_color( Color color );
 
     /**
      * Sets (or resets) the console color.
@@ -50,7 +48,7 @@ public:
      * @param color [in] Color to be set, or RESET to reset to default value
      * @return The ColorConsoleW object (*this)
      */
-    ConsoleW& operator<<( Color color ) noexcept;
+    ConsoleW& operator<<( Color color );
 
     /**
      * Inserter for ostream manipulators.

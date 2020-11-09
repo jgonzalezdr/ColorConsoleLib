@@ -75,7 +75,7 @@ ConsoleW::ConsoleW( ConsoleType consoleType )
 #endif
 }
 
-ConsoleW::~ConsoleW() noexcept
+ConsoleW::~ConsoleW()
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
     flush();
@@ -111,13 +111,13 @@ void ConsoleW::Initialize()
 #endif
 }
 
-ConsoleW& ConsoleW::operator<<( Color color ) noexcept
+ConsoleW& ConsoleW::operator<<( Color color )
 {
     set_color( color );
     return *this;
 }
 
-void ConsoleW::set_color( Color color ) noexcept
+void ConsoleW::set_color( Color color )
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
     flush();

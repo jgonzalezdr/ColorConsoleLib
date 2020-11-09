@@ -96,7 +96,7 @@ template <class _Elem, class _Traits>
 std::basic_ostream<_Elem, _Traits>& endl( std::basic_ostream<_Elem, _Traits>& str )
 {
  #ifndef WIN32
-    str << "\e[K";
+    str << "\033[K";
  #endif
     return std::endl( str );
 }

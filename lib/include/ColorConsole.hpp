@@ -33,14 +33,14 @@ public:
     /**
      * Destructor.
      */
-    ~Console() noexcept;
+    ~Console();
 
     /**
      * Sets (or resets) the console color.
      *
      * @param color [in] Color to be set, or RESET to reset to default value
      */
-    void set_color( Color color ) noexcept;
+    void set_color( Color color );
 
     /**
      * Sets (or resets) the console color.
@@ -48,7 +48,7 @@ public:
      * @param color [in] Color to be set, or RESET to reset to default value
      * @return The ColorConsole object (*this)
      */
-    Console& operator<<( Color color ) noexcept;
+    Console& operator<<( Color color );
 
     /**
      * Inserter for ostream manipulators.

@@ -30,17 +30,17 @@ void setAnsiColor( Stream *out, Color color )
 {
     if( color >= Color::RESET )
     {
-        *out << "\e[0m";
+        *out << "\033[0m";
     }
     else
     {
-        *out << "\e[";
+        *out << "\033[";
 
         Color bg_color = ( color & (Color::BG_LIGHT_RED|Color::BG_LIGHT_GREEN|Color::BG_LIGHT_BLUE) );
 
-        // *out << "\033[";
         switch( bg_color )
         {
+            default:
             case Color::BG_NONE:
                 if( cast_bool( color & Color::BG_BLACK ) )
                 {
@@ -99,7 +99,6 @@ void setAnsiColor( Stream *out, Color color )
         }
         *out << ";";
 
-        // *out << "\033[";
         switch( color & (Color::FG_LIGHT_RED|Color::FG_LIGHT_GREEN|Color::FG_LIGHT_BLUE) )
         {
             case Color::FG_BLACK:
@@ -147,6 +146,7 @@ void setAnsiColor( Stream *out, Color color )
             case Color::FG_LIGHT_CYAN:
                 *out << "1;36";
                 break;
+            default:
             case Color::FG_WHITE:
                 *out << "1;37";
                 break;

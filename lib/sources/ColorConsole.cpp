@@ -103,13 +103,13 @@ void Console::Initialize()
 #endif
 }
 
-Console& Console::operator<<( Color color ) noexcept
+Console& Console::operator<<( Color color )
 {
     set_color( color );
     return *this;
 }
 
-void Console::set_color( Color color ) noexcept
+void Console::set_color( Color color )
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
     flush();
