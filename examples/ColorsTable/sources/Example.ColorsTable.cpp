@@ -78,6 +78,12 @@ int main( int argc, const char* argv[] )
     cout << "  BG_DARK_MAGENTA   " << Color::RESET << endl;
     cout << (Color::FG_BLACK|Color::BG_WHITE);
     cout << "      FG_BLACK      ";
+    cout << (Color::BG_BLACK|Color::FG_WHITE);
+    cout << "      BG_BLACK      " << Color::RESET << endl;
+
+    cout << (Color::BG_WHITE|Color::FG_WHITE);
+    cout << "                    ";
+
     cout << (Color::BG_NONE|Color::FG_WHITE);
     cout << "      BG_NONE       " << Color::RESET << endl;
 

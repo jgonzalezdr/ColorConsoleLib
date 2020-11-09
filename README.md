@@ -30,7 +30,11 @@ There are 16 foreground **Color**s (which names start with `FG_`) that can be mi
 
 ![Color Table](https://github.com/jgonzalezdr/ColorConsoleLib/blob/web_main/images/ColorTable.png?raw=true)
 
-> **Note**: The background **Color** `FG_NONE` interpretation depends on the terminal. Some interpret it as transparent (showing the underlying console color), others as black.
+> **Note**:
+>
+> The background **Color** `FG_BLACK` interpretation depends on the terminal. Some interpret it as black, others as transparent (showing the underlying console color).
+>
+> The background **Color** `FG_NONE` interpretation depends on the terminal. Some interpret it as transparent (showing the underlying console color), others as black.
 
 The special **Color** `RESET` can be used to return the console to the original "non-colorized" mode.
 
@@ -53,20 +57,21 @@ Additionally, a new **set_color()** function has been added to the output stream
   - [LCOV for Windows](https://github.com/jgonzalezdr/lcov/releases) [Optional, needed if tests and coverage are enabled using MinGW] (tested with [v1.15.alpha1w](https://github.com/jgonzalezdr/lcov/releases/download/v1.15.alpha1w/lcov-v1.15.alpha1w.zip))
   - [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) [Optional, needed if tests and coverage are enabled using Visual Studio 2019] (tested with v0.9.8.0)
 - On Linux:
-  - [GCC](https://gcc.gnu.org/) (tested with v8.0.0)
+  - [GCC](https://gcc.gnu.org/) (tested with v7.5.0, v8.4.0 and v9.3.0)
   - [LCOV](http://ltp.sourceforge.net/coverage/lcov.php) [Optional, needed if tests and coverage are enabled using GCC] (tested with v1.14)
 
 ### CMake Project Options
 
 | OPTION                | Description |
 | -                     | - |
-| `-DCMAKE_BUILD_TYPE`  | _(only for single-config generators)_<br>`Debug`<br>`Release`<br>`RelWithDebInfo` (Release with debug info)<br>`MinSizeRel`(Release with size optimization)<br> `Coverage`(Debug with code coverage enabled) |
-| `-DENABLE_TEST`       | Enables compilation and execution of tests |
-| `-DCPPUTEST_HOME`     | Path to your CppUTest installation directory |
-| `-DLCOV_HOME`         | Path to your LCOV installation directory |
-| `-DENABLE_INSTALLER`  | Enables generation of installer packages |
-| `-DCI_MODE`           | Enables Continous Integration mode |
-| `-DCOVERAGE`          | _(only for multi-config generators)_<br>Enables code coverage in tests |
-| `-DCOVERAGE_VERBOSE`  | Enables verbose code coverage |
+| `-DCMAKE_BUILD_TYPE`  | Selects build type<br>_(only for single-config generators)_<br>`Debug`<br>`Release`_(default)_<br>`RelWithDebInfo` (Release with debug info)<br>`MinSizeRel`(Release with size optimization)<br> `Coverage`(Debug with code coverage enabled) |
+| `-DENABLE_TEST`       | Enables compilation and execution of tests<br>`ON`_(default)_<br>`OFF` |
+| `-DCPPUTEST_HOME`     | Path to your CppUTest installation directory<br>`<filesystem path>` |
+| `-DLCOV_HOME`         | Path to your LCOV installation directory<br>`<filesystem path>` |
+| `-DENABLE_INSTALLER`  | Enables generation of installer packages<br>`ON`_(default)_<br>`OFF` |
+| `-DBUILD_EXAMPLES`    | Enables building examples<br>`ON`_(default)_<br>`OFF` |
+| `-DCI_MODE`           | Enables Continous Integration mode<br>`ON`<br>`OFF`_(default)_ |
+| `-DCOVERAGE`          | Enables code coverage in tests<br>_(only for multi-config generators)_<br>`ON`_(default)_<br>`OFF` |
+| `-DCOVERAGE_VERBOSE`  | Enables verbose code coverage<br>`ON`<br>`OFF`_(default)_ |
 
 
