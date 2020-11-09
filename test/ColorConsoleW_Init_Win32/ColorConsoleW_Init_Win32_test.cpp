@@ -32,23 +32,40 @@
  *                          TEST GROUP DEFINITION
  *===========================================================================*/
 
+// To avoid false memleak warnings
+#if defined(_MSC_VER) || ( defined(__GNUC__) && ( __GNUC__ < 9 ) )
+std::wstringbuf outBuffer;
+std::wstringbuf errBuffer;
+#endif
+
 TEST_GROUP( ColorConsoleW )
 {
     std::wstreambuf *oldOutBuffer;
     std::wstreambuf *oldErrBuffer;
 
+// To avoid false memleak warnings
+#if defined(__GNUC__) && !( __GNUC__ < 9 )
     std::wstringbuf outBuffer;
     std::wstringbuf errBuffer;
+#endif
 
     void setup()
     {
         oldOutBuffer = std::wcout.rdbuf();
         oldErrBuffer = std::wcerr.rdbuf();
+
+#if defined(_MSC_VER)
+        IGNORE_ALL_LEAKS_IN_TEST();
+#endif
     }
 
     void teardown()
     {
         RestoreRealConsole();
+
+        // To avoid false memleak warnings
+        outBuffer.str(L"");
+        errBuffer.str(L"");
     }
 
     void RedirectRealConsole()
@@ -88,6 +105,8 @@ TEST_GROUP( ColorConsoleW )
 
 TEST( ColorConsoleW, Output )
 {
+    wchar_t tmpBuf[100] = L"\0";
+
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -123,7 +142,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -140,7 +159,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -156,11 +175,12 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", outBuffer.str().c_str() ) );
+
+    outBuffer.sgetn( tmpBuf, 100 );
+    CHECK_EQUAL( 0, std::wcscmp( L"Something", tmpBuf ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color dark cyan and background color yellow
@@ -174,7 +194,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -191,7 +211,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -208,7 +228,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -225,7 +245,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -242,7 +262,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -259,7 +279,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -276,7 +296,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -293,14 +313,16 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
 
 TEST( ColorConsoleW, Error )
 {
+    wchar_t tmpBuf[100] = L"\0";
+
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -312,7 +334,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -337,7 +359,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -354,7 +376,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -370,11 +392,12 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", errBuffer.str().c_str() ) );
+
+    errBuffer.sgetn( tmpBuf, 100 );
+    CHECK_EQUAL( 0, std::wcscmp( L"Something", tmpBuf ) );
 
     // Cleanup
     mock().clear();
-    errBuffer.str(L"");
 
     //////////////////////////////////////////////////////////////////////////
     // Destruction
@@ -388,8 +411,8 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
@@ -407,7 +430,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -432,7 +455,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -448,7 +471,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -465,8 +488,8 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
@@ -484,7 +507,7 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -509,7 +532,7 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -525,7 +548,7 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -542,8 +565,8 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }

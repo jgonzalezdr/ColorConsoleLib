@@ -45,6 +45,10 @@ TEST_GROUP( ColorConsole )
     void teardown()
     {
         RestoreRealConsole();
+
+        // To avoid false memleak warnings
+        outBuffer.str("");
+        errBuffer.str("");
     }
 
     void RedirectRealConsole()
@@ -77,6 +81,8 @@ TEST_GROUP( ColorConsole )
 
 TEST( ColorConsole, Output )
 {
+    char tmpBuf[100] = "\0";
+
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -95,7 +101,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -112,7 +118,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -128,11 +134,12 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", outBuffer.str().c_str() );
+
+    outBuffer.sgetn( tmpBuf, 100 );
+    STRCMP_EQUAL( "Something", tmpBuf );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color dark cyan and background color yellow
@@ -146,7 +153,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -163,7 +170,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -180,7 +187,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -197,7 +204,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -214,7 +221,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -231,7 +238,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -248,7 +255,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -265,13 +272,16 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
 
 TEST( ColorConsole, Error )
 {
+    char tmpBuf[100] = "\0";
+
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -289,7 +299,7 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -306,7 +316,7 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -322,11 +332,12 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", errBuffer.str().c_str() );
+
+    errBuffer.sgetn( tmpBuf, 100 );
+    STRCMP_EQUAL( "Something", tmpBuf );
 
     // Cleanup
     mock().clear();
-    errBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Destruction
@@ -340,7 +351,8 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }

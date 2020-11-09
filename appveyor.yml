@@ -44,7 +44,6 @@ environment:
   - Platform: TDM-GCC-64
     PlatformToolset: 9.2.0
     Configuration: Coverage
-    CheckCompilation: True
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
 for:
