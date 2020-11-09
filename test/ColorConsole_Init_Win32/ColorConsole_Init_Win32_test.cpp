@@ -33,6 +33,8 @@ std::stringbuf errBuffer;
 
 TEST_GROUP( ColorConsole )
 {
+    char tmpBuf[100] = "\0";
+
     std::streambuf *oldOutBuffer;
     std::streambuf *oldErrBuffer;
 
@@ -80,6 +82,13 @@ TEST_GROUP( ColorConsole )
         console->Initialize();
         RestoreRealConsole();
     }
+
+    const char* readFromStringBuf( std::stringbuf& buf )
+    {
+        std::streamsize n = buf.sgetn( tmpBuf, 100 );
+        tmpBuf[n] = '\0';
+        return tmpBuf;
+    }
 };
 
 /*===========================================================================
@@ -88,8 +97,6 @@ TEST_GROUP( ColorConsole )
 
 TEST( ColorConsole, Output )
 {
-    char tmpBuf[100] = "\0";
-
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -157,9 +164,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-
-    outBuffer.sgetn( tmpBuf, 100 );
-    STRCMP_EQUAL( "Something", tmpBuf );
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
@@ -303,8 +308,6 @@ TEST( ColorConsole, Output )
 
 TEST( ColorConsole, Error )
 {
-    char tmpBuf[100] = "\0";
-
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -371,9 +374,7 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-
-    errBuffer.sgetn( tmpBuf, 100 );
-    STRCMP_EQUAL( "Something", tmpBuf );
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer) );
 
     // Cleanup
     mock().clear();

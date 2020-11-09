@@ -42,6 +42,8 @@ std::wstringbuf errBuffer;
 
 TEST_GROUP( ColorConsoleW )
 {
+    wchar_t tmpBuf[100] = L"\0";
+
     std::wstreambuf *oldOutBuffer;
     std::wstreambuf *oldErrBuffer;
 
@@ -92,6 +94,13 @@ TEST_GROUP( ColorConsoleW )
 
         return newConsole;
     }
+
+    const wchar_t* readFromStringBuf( std::wstringbuf& buf )
+    {
+        std::streamsize n = buf.sgetn( tmpBuf, 100 );
+        tmpBuf[n] = L'\0';
+        return tmpBuf;
+    }
 };
 
 /*===========================================================================
@@ -100,8 +109,6 @@ TEST_GROUP( ColorConsoleW )
 
 TEST( ColorConsoleW, ConstructorOutput )
 {
-    wchar_t tmpBuf[100] = L"\0";
-
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -155,9 +162,7 @@ TEST( ColorConsoleW, ConstructorOutput )
 
     // Verify
     mock().checkExpectations();
-
-    outBuffer.sgetn( tmpBuf, 100 );
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", tmpBuf ) );
+    CHECK_EQUAL( 0, std::wcscmp( L"Something", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
@@ -301,8 +306,6 @@ TEST( ColorConsoleW, ConstructorOutput )
 
 TEST( ColorConsoleW, ConstructorError )
 {
-    wchar_t tmpBuf[100] = L"\0";
-
     //////////////////////////////////////////////////////////////////////////
     // Creation
     //
@@ -356,9 +359,7 @@ TEST( ColorConsoleW, ConstructorError )
 
     // Verify
     mock().checkExpectations();
-
-    errBuffer.sgetn( tmpBuf, 100 );
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", tmpBuf ) );
+    CHECK_EQUAL( 0, std::wcscmp( L"Something", readFromStringBuf(errBuffer) ) );
 
     // Cleanup
     mock().clear();
