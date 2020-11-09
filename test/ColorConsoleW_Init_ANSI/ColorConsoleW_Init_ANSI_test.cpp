@@ -28,6 +28,8 @@
 
 TEST_GROUP( ColorConsoleW )
 {
+    wchar_t tmpBuf[100] = L"\0";
+
     std::wstreambuf *oldOutBuffer;
     std::wstreambuf *oldErrBuffer;
 
@@ -74,6 +76,13 @@ TEST_GROUP( ColorConsoleW )
         console->Initialize();
         RestoreRealConsole();
     }
+
+    const wchar_t* readFromStringBuf( std::wstringbuf& buf )
+    {
+        std::streamsize n = buf.sgetn( tmpBuf, 100 );
+        tmpBuf[n] = L'\0';
+        return tmpBuf;
+    }
 };
 
 /*===========================================================================
@@ -93,7 +102,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -109,7 +118,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -125,11 +134,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[49;1;31m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[49;1;31m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Write something
@@ -142,11 +150,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"Something", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"Something", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color dark cyan and background color yellow
@@ -159,11 +166,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[103;36m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[103;36m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color light magenta and background color light green
@@ -176,11 +182,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[102;1;35m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[102;1;35m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color brown and background color dark magenta
@@ -193,11 +198,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[45;33m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[45;33m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Reset color
@@ -210,11 +214,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[0m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[0m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color black and background color white
@@ -227,11 +230,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[107;30m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[107;30m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Reset color combined with color definition 
@@ -244,11 +246,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[0m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[0m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color white and background color none
@@ -261,11 +262,10 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[49;1;37m", outBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[49;1;37m", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Destruction
@@ -278,8 +278,8 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[0m", outBuffer.str().c_str() ) );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, wcscmp( L"\033[0m", readFromStringBuf(outBuffer) ) );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
@@ -297,7 +297,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -313,7 +313,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -329,11 +329,10 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[49;1;31m", errBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"\033[49;1;31m", readFromStringBuf(errBuffer) ) );
 
     // Cleanup
     mock().clear();
-    errBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Write something
@@ -346,11 +345,10 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"Something", errBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, wcscmp( L"Something", readFromStringBuf(errBuffer) ) );
 
     // Cleanup
     mock().clear();
-    errBuffer.str(L"");;
 
     //////////////////////////////////////////////////////////////////////////
     // Destruction
@@ -363,8 +361,8 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    CHECK_EQUAL( 0, wcscmp( L"\033[0m", errBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, wcscmp( L"\033[0m", readFromStringBuf(errBuffer) ) );
 
     // Cleanup
 }
@@ -382,7 +380,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -398,7 +396,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -414,7 +412,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -430,8 +428,8 @@ TEST( ColorConsoleW, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, wcscmp( L"\033[0m", outBuffer.str().c_str() ) );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, wcscmp( L"\033[0m", readFromStringBuf(outBuffer) ) );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
@@ -449,7 +447,7 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -465,7 +463,7 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -481,7 +479,7 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -497,8 +495,8 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    CHECK_EQUAL( 0, wcscmp( L"\033[0m", errBuffer.str().c_str() ) );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, wcscmp( L"\033[0m", readFromStringBuf(errBuffer) ) );
 
     // Cleanup
 }

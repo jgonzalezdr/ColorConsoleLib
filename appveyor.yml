@@ -2,17 +2,6 @@ version: 1.0.0-{build}
 
 environment:
   matrix:
-  - Platform: MSVC64
-    Configuration: Release
-    GenerateInstaller: True
-    PublishArtifacts: True
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-  # - Platform: MSVC64
-  #   Configuration: Release
-  #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  # - Platform: MSVC64
-  #   Configuration: Release
-  #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
   - Platform: LINUX-GCC
     GccVersion: 9
     Configuration: Release
@@ -41,6 +30,17 @@ environment:
     PlatformToolset: 7.3.0
     Configuration: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  - Platform: MSVC64
+    Configuration: Release
+    GenerateInstaller: True
+    PublishArtifacts: True
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+  # - Platform: MSVC64
+  #   Configuration: Release
+  #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+  # - Platform: MSVC64
+  #   Configuration: Release
+  #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
   - Platform: TDM-GCC-64
     PlatformToolset: 9.2.0
     Configuration: Coverage

@@ -28,6 +28,8 @@
 
 TEST_GROUP( ColorConsole )
 {
+    char tmpBuf[100] = "\0";
+
     std::streambuf *oldOutBuffer;
     std::streambuf *oldErrBuffer;
 
@@ -67,6 +69,13 @@ TEST_GROUP( ColorConsole )
 
         return newConsole;
     }
+
+    const char* readFromStringBuf( std::stringbuf& buf )
+    {
+        std::streamsize n = buf.sgetn( tmpBuf, 100 );
+        tmpBuf[n] = '\0';
+        return tmpBuf;
+    }
 };
 
 /*===========================================================================
@@ -86,7 +95,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -102,11 +111,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[49;1;31m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[49;1;31m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Write something
@@ -119,11 +127,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color dark cyan and background color yellow
@@ -136,11 +143,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[103;36m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[103;36m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color light magenta and background color light green
@@ -153,11 +159,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[102;1;35m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[102;1;35m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color brown and background color dark magenta
@@ -170,11 +175,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[45;33m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[45;33m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Reset color
@@ -187,11 +191,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color black and background color white
@@ -204,11 +207,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[107;30m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[107;30m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Reset color combined with color definition 
@@ -221,11 +223,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Set foreground color white and background color none
@@ -238,11 +239,10 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[49;1;37m", outBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[49;1;37m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
-    outBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Destruction
@@ -255,8 +255,8 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", outBuffer.str().c_str() );
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }
@@ -274,7 +274,7 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, errBuffer.str().length() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
     mock().clear();
@@ -290,11 +290,10 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[49;1;31m", errBuffer.str().c_str() );
+    STRCMP_EQUAL( "\033[49;1;31m", readFromStringBuf(errBuffer)  );
 
     // Cleanup
     mock().clear();
-    errBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Write something
@@ -307,11 +306,10 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", errBuffer.str().c_str() );
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer) );
 
     // Cleanup
     mock().clear();
-    errBuffer.str("");
 
     //////////////////////////////////////////////////////////////////////////
     // Destruction
@@ -324,8 +322,8 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.str().length() );
-    STRCMP_EQUAL( "\033[0m", errBuffer.str().c_str() );
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(errBuffer) );
 
     // Cleanup
 }
