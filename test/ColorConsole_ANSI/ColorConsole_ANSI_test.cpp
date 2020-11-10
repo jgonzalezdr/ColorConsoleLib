@@ -213,6 +213,182 @@ TEST( ColorConsole, Output )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
+    // Set foreground color dark green and background color dark red
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_DARK_GREEN | ColorConsole::Color::BG_DARK_RED);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[41;32m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light cyan and background color dark cyan
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_LIGHT_CYAN | ColorConsole::Color::BG_DARK_CYAN);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[46;1;36m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color dark red and background color light grey
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_DARK_RED | ColorConsole::Color::BG_LIGHT_GREY);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[47;31m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color dark magenta and background color light blue
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_DARK_MAGENTA | ColorConsole::Color::BG_LIGHT_BLUE);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[104;35m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light blue and background color light magenta
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_LIGHT_BLUE | ColorConsole::Color::BG_LIGHT_MAGENTA);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[105;1;34m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color yellow and background color dark green
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_YELLOW | ColorConsole::Color::BG_DARK_GREEN);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[42;1;33m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color dark grey and background color dark blue
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_DARK_GREY | ColorConsole::Color::BG_DARK_BLUE);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[44;1;30m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light grey and background color light red
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_LIGHT_GREY | ColorConsole::Color::BG_LIGHT_RED);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[101;37m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light red and background color light cyan
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_LIGHT_RED | ColorConsole::Color::BG_LIGHT_CYAN);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[106;1;31m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light green and background color dark grey
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_LIGHT_GREEN | ColorConsole::Color::BG_DARK_GREY);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[100;1;32m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color dark blue and background color brown
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_DARK_BLUE | ColorConsole::Color::BG_BROWN);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[43;34m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
     // Reset color combined with color definition 
     //
 
@@ -224,6 +400,22 @@ TEST( ColorConsole, Output )
     // Verify
     mock().checkExpectations();
     STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color white and background color black
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_WHITE | ColorConsole::Color::BG_BLACK);
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[40;1;37m", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
