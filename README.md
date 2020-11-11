@@ -28,7 +28,7 @@ int main( int argc, const char* argv[] )
 
 There are 16 foreground **Color**s (which names start with `FG_`) that can be mixed with 16 background **Color**s (which names start with `BG_`) using the _OR_ operation (`|`).
 
-![Color Table](https://github.com/jgonzalezdr/ColorConsoleLib/blob/web_main/images/ColorTable.png?raw=true)
+![Color Table](https://github.com/jgonzalezdr/ColorConsoleLib/blob/gh-pages/images/ColorTable.png?raw=true)
 
 > **Note**:
 >
@@ -42,7 +42,7 @@ Additionally, a new **set_color()** function has been added to the output stream
 
 ### Example Output
 
-![Example Output](https://github.com/jgonzalezdr/ColorConsoleLib/blob/web_main/images/ColorConsoleLib.png?raw=true)
+![Example Output](https://github.com/jgonzalezdr/ColorConsoleLib/blob/gh-pages/images/ColorConsoleLib.png?raw=true)
 
 ## Building from Source
 
@@ -65,13 +65,13 @@ Additionally, a new **set_color()** function has been added to the output stream
 | OPTION                | Description |
 | -                     | - |
 | `-DCMAKE_BUILD_TYPE`  | Selects build type<br>_(only for single-config generators)_<br>`Debug`<br>`Release`_(default)_<br>`RelWithDebInfo` (Release with debug info)<br>`MinSizeRel`(Release with size optimization)<br> `Coverage`(Debug with code coverage enabled) |
+| `-DBUILD_SHARED_LIB`  | Enables generation of shared library<br>`ON`_(default)_<br>`OFF` |
+| `-DBUILD_STATIC_LIB`  | Enables generation of static library<br>`ON`_(default)_<br>`OFF` |
 | `-DENABLE_TEST`       | Enables compilation and execution of tests<br>`ON`_(default)_<br>`OFF` |
 | `-DCPPUTEST_HOME`     | Path to your CppUTest installation directory<br>`<filesystem path>` |
 | `-DLCOV_HOME`         | Path to your LCOV installation directory<br>`<filesystem path>` |
 | `-DENABLE_INSTALLER`  | Enables generation of installer packages<br>`ON`_(default)_<br>`OFF` |
 | `-DBUILD_EXAMPLES`    | Enables building examples<br>`ON`_(default)_<br>`OFF` |
-| `-DCI_MODE`           | Enables Continous Integration mode<br>`ON`<br>`OFF`_(default)_ |
 | `-DCOVERAGE`          | Enables code coverage in tests<br>_(only for multi-config generators)_<br>`ON`_(default)_<br>`OFF` |
 | `-DCOVERAGE_VERBOSE`  | Enables verbose code coverage<br>`ON`<br>`OFF`_(default)_ |
-
-
+| `-DCI_MODE`           | Enables Continous Integration mode<br>`ON`<br>`OFF`_(default)_ |
