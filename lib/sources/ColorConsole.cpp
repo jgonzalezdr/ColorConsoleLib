@@ -66,16 +66,37 @@ Console::Console( ConsoleType consoleType )
 #endif
 }
 
+Console::Console( std::streambuf *sb, bool color )
+: std::ostream( sb )
+{
+    m_consoleType = color ? ConsoleType::CUSTOM_COLOR : ConsoleType::CUSTOM_NOCOLOR;
+
+#ifdef WIN32
+    m_handle = INVALID_HANDLE_VALUE;
+#endif
+}
+
 Console::~Console()
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
-    flush();
-    if( m_handle != INVALID_HANDLE_VALUE )
+    if( m_consoleType <= ConsoleType::STD_ERROR )
     {
-        SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        flush();
+
+        if( m_handle != INVALID_HANDLE_VALUE )
+        {
+            SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        }
+    }
+    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
+    {
+        setAnsiColor( this, Color::RESET );
     }
 #else
-    setAnsiColor( this, Color::RESET );
+    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
+    {
+        setAnsiColor( this, Color::RESET );
+    }
 #endif
 }
 
@@ -89,7 +110,7 @@ void Console::Initialize()
 #endif
 
 #ifdef WIN32
-    if( m_handle == INVALID_HANDLE_VALUE )
+    if( ( m_handle == INVALID_HANDLE_VALUE ) && ( m_consoleType <= ConsoleType::STD_ERROR ) )
     {
         if( m_consoleType == ConsoleType::STD_OUTPUT )
         {
@@ -115,18 +136,28 @@ Console& Console::operator<<( Color color )
 void Console::set_color( Color color )
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
-    flush();
+    if( m_consoleType <= ConsoleType::STD_ERROR )
+    {
+        flush();
 
-    if( color >= Color::RESET )
-    {
-        SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        if( color >= Color::RESET )
+        {
+            SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        }
+        else
+        {
+            SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+        }
     }
-    else
+    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
     {
-        SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+        setAnsiColor( this, color );
     }
 #else
-    setAnsiColor( this, color );
+    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
+    {
+        setAnsiColor( this, color );
+    }
 #endif
 }
 

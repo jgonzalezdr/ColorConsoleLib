@@ -27,4 +27,7 @@ if( ENABLE_TEST )
         add_subdirectory( ColorConsoleW_Init_ANSI )
     endif()
 
+    add_subdirectory( ColorConsole_Custom )
+    add_subdirectory( ColorConsoleW_Custom )
+
 endif()

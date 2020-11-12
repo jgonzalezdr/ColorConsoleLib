@@ -75,16 +75,37 @@ ConsoleW::ConsoleW( ConsoleType consoleType )
 #endif
 }
 
+ConsoleW::ConsoleW( std::wstreambuf *sb, bool color )
+: std::wostream( sb )
+{
+    m_consoleType = color ? ConsoleType::CUSTOM_COLOR : ConsoleType::CUSTOM_NOCOLOR;
+
+#ifdef WIN32
+    m_handle = INVALID_HANDLE_VALUE;
+#endif
+}
+
 ConsoleW::~ConsoleW()
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
-    flush();
-    if( m_handle != INVALID_HANDLE_VALUE )
+    if( m_consoleType <= ConsoleType::STD_ERROR )
     {
-        SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        flush();
+
+        if( m_handle != INVALID_HANDLE_VALUE )
+        {
+            SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        }
+    }
+    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
+    {
+        setAnsiColor( this, Color::RESET );
     }
 #else
-    setAnsiColor( this, Color::RESET );
+    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
+    {
+        setAnsiColor( this, Color::RESET );
+    }
 #endif
 }
 
@@ -98,7 +119,7 @@ void ConsoleW::Initialize()
 #endif
 
 #ifdef WIN32
-    if( m_handle == INVALID_HANDLE_VALUE )
+    if( ( m_handle == INVALID_HANDLE_VALUE ) && ( m_consoleType <= ConsoleType::STD_ERROR ) )
     {
         _setmode( _fileno( ( m_consoleType == ConsoleType::STD_ERROR ) ? stderr : stdout ), _O_U16TEXT );
 
@@ -110,7 +131,10 @@ void ConsoleW::Initialize()
         m_origConsoleAttrs = consoleInfo.wAttributes;
     }
 #else
-    std::setlocale(LC_ALL, "");
+    if( m_consoleType <= ConsoleType::STD_ERROR )
+    {
+        std::setlocale(LC_ALL, "");
+    }
 #endif
 }
 
@@ -123,18 +147,28 @@ ConsoleW& ConsoleW::operator<<( Color color )
 void ConsoleW::set_color( Color color )
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
-    flush();
+    if( m_consoleType <= ConsoleType::STD_ERROR )
+    {
+        flush();
 
-    if( color >= Color::RESET )
-    {
-        SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        if( color >= Color::RESET )
+        {
+            SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+        }
+        else
+        {
+            SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+        }
     }
-    else
+    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
     {
-        SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+        setAnsiColor( this, color );
     }
 #else
-    setAnsiColor( this, color );
+    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
+    {
+        setAnsiColor( this, color );
+    }
 #endif
 }
 

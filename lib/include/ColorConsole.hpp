@@ -31,6 +31,20 @@ class COLORCONSOLE_API Console : public std::ostream
 {
 public:
     /**
+     * Constructor for custom streams.
+     * 
+     * Colorization of custom streams (if enabled) will be performed using ANSI color escape codes.
+     * 
+     * Custom streams are mostly intended for testing software that writes on color consoles.
+     * 
+     * param sb [in] Stream buffer where the strem will write to
+     * param color [in] Indicates if colorization is enabled
+     *
+     * @param consoleType [in] Console to colorize
+     */
+    Console( std::streambuf *sb, bool color = true );
+
+    /**
      * Destructor.
      */
     ~Console();
@@ -101,7 +115,7 @@ public:
 
 private:
     /**
-     * Constructor.
+     * Constructor for standard streams.
      *
      * @param consoleType [in] Console to colorize
      */
