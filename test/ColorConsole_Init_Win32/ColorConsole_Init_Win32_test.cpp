@@ -95,7 +95,7 @@ TEST_GROUP( ColorConsole )
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( ColorConsole, Output )
+TEST( ColorConsole, Output_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -306,7 +306,7 @@ TEST( ColorConsole, Output )
     // Cleanup
 }
 
-TEST( ColorConsole, Error )
+TEST( ColorConsole, Error_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -545,3 +545,39 @@ TEST( ColorConsole, Error_DoubleInit )
 
     // Cleanup
 }
+
+TEST( ColorConsole, NoInit )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::Console* out = ConstructConsole( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+
+    // Exercise
+    delete out;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
+
+    // Cleanup
+}
+

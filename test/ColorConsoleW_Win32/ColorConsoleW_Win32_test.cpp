@@ -107,7 +107,7 @@ TEST_GROUP( ColorConsoleW )
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( ColorConsoleW, ConstructorOutput )
+TEST( ColorConsoleW, Output )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -304,7 +304,7 @@ TEST( ColorConsoleW, ConstructorOutput )
     // Cleanup
 }
 
-TEST( ColorConsoleW, ConstructorError )
+TEST( ColorConsoleW, Error )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation

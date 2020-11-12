@@ -89,7 +89,7 @@ TEST_GROUP( ColorConsole )
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( ColorConsole, Output )
+TEST( ColorConsole, Output_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -284,7 +284,7 @@ TEST( ColorConsole, Output )
     // Cleanup
 }
 
-TEST( ColorConsole, Error )
+TEST( ColorConsole, Error_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation

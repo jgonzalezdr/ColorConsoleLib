@@ -79,7 +79,10 @@ ConsoleW::~ConsoleW()
 {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
     flush();
-    SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+    if( m_handle != INVALID_HANDLE_VALUE )
+    {
+        SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+    }
 #else
     setAnsiColor( this, Color::RESET );
 #endif

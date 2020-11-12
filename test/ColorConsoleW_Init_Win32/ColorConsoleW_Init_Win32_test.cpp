@@ -112,7 +112,7 @@ TEST_GROUP( ColorConsoleW )
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( ColorConsoleW, Output )
+TEST( ColorConsoleW, Output_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -324,7 +324,7 @@ TEST( ColorConsoleW, Output )
     // Cleanup
 }
 
-TEST( ColorConsoleW, Error )
+TEST( ColorConsoleW, Error_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -418,7 +418,7 @@ TEST( ColorConsoleW, Error )
     // Cleanup
 }
 
-TEST( ColorConsoleW, Output_DoubleInit )
+TEST( ColorConsoleW, Output_DoubleInit_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -495,7 +495,7 @@ TEST( ColorConsoleW, Output_DoubleInit )
     // Cleanup
 }
 
-TEST( ColorConsoleW, Error_DoubleInit )
+TEST( ColorConsoleW, Error_DoubleInit_Init )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -563,6 +563,41 @@ TEST( ColorConsoleW, Error_DoubleInit )
 
     // Exercise
     delete err;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
+
+    // Cleanup
+}
+
+TEST( ColorConsoleW, NoInit )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::ConsoleW* out = ConstructConsoleW( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+
+    // Exercise
+    delete out;
 
     // Verify
     mock().checkExpectations();
