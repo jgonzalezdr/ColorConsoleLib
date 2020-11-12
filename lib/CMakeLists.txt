@@ -4,7 +4,7 @@ project( ColorConsole VERSION 1.0.0 )
 
 option( BUILD_STATIC_LIB "Build static library" ON )
 option( BUILD_SHARED_LIB "Build shared library" ON )
-option( REQUIRE_INITIALIZATION "Make initialization mandatory" ON )
+option( REQUIRE_INITIALIZATION "Make initialization mandatory" OFF )
 option( FORCE_ANSI_ESCAPE_CODES "Force using ANSI escape codes in Windows" OFF )
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
