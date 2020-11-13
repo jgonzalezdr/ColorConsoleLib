@@ -12,6 +12,7 @@
  *===========================================================================*/
 
 #include <string>
+#include <vector>
 
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
@@ -24,7 +25,7 @@
 #include <io.h>
 #include <stdio.h>
 
-#include <sstream>
+#include "TestHelpers.hpp"
 
 /*===========================================================================
  *                      COMMON TEST DEFINES & MACROS
@@ -42,8 +43,6 @@ std::wstringbuf errBuffer;
 
 TEST_GROUP( ColorConsoleW )
 {
-    wchar_t tmpBuf[100] = L"\0";
-
     std::wstreambuf *oldOutBuffer;
     std::wstreambuf *oldErrBuffer;
 
@@ -93,13 +92,6 @@ TEST_GROUP( ColorConsoleW )
         RestoreRealConsole();
 
         return newConsole;
-    }
-
-    const wchar_t* readFromStringBuf( std::wstringbuf& buf )
-    {
-        std::streamsize n = buf.sgetn( tmpBuf, 100 );
-        tmpBuf[n] = L'\0';
-        return tmpBuf;
     }
 };
 
@@ -163,7 +155,7 @@ TEST( ColorConsoleW, Output )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", readFromStringBuf(outBuffer) ) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -361,7 +353,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", readFromStringBuf(errBuffer) ) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -377,7 +369,7 @@ TEST( ColorConsoleW, Error )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"\n", readFromStringBuf(errBuffer) ) );
+    STRCMP_EQUAL( "\n", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
     mock().clear();

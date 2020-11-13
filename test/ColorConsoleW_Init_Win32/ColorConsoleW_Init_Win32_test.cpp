@@ -22,7 +22,7 @@
 #include <io.h>
 #include <stdio.h>
 
-#include <sstream>
+#include "TestHelpers.hpp"
 
 /*===========================================================================
  *                      COMMON TEST DEFINES & MACROS
@@ -40,8 +40,6 @@ std::wstringbuf errBuffer;
 
 TEST_GROUP( ColorConsoleW )
 {
-    wchar_t tmpBuf[100] = L"\0";
-
     std::wstreambuf *oldOutBuffer;
     std::wstreambuf *oldErrBuffer;
 
@@ -99,20 +97,13 @@ TEST_GROUP( ColorConsoleW )
         console->Initialize();
         RestoreRealConsole();
     }
-
-    const wchar_t* readFromStringBuf( std::wstringbuf& buf )
-    {
-        std::streamsize n = buf.sgetn( tmpBuf, 100 );
-        tmpBuf[n] = L'\0';
-        return tmpBuf;
-    }
 };
 
 /*===========================================================================
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( ColorConsoleW, Output_Init )
+TEST( ColorConsoleW, Output )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -182,7 +173,7 @@ TEST( ColorConsoleW, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", readFromStringBuf(outBuffer) ) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -324,7 +315,7 @@ TEST( ColorConsoleW, Output_Init )
     // Cleanup
 }
 
-TEST( ColorConsoleW, Error_Init )
+TEST( ColorConsoleW, Error )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -395,7 +386,7 @@ TEST( ColorConsoleW, Error_Init )
 
     // Verify
     mock().checkExpectations();
-    CHECK_EQUAL( 0, std::wcscmp( L"Something", readFromStringBuf(errBuffer) ) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -418,7 +409,7 @@ TEST( ColorConsoleW, Error_Init )
     // Cleanup
 }
 
-TEST( ColorConsoleW, Output_DoubleInit_Init )
+TEST( ColorConsoleW, Output_DoubleInit )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -495,7 +486,7 @@ TEST( ColorConsoleW, Output_DoubleInit_Init )
     // Cleanup
 }
 
-TEST( ColorConsoleW, Error_DoubleInit_Init )
+TEST( ColorConsoleW, Error_DoubleInit )
 {
     //////////////////////////////////////////////////////////////////////////
     // Creation
@@ -563,41 +554,6 @@ TEST( ColorConsoleW, Error_DoubleInit_Init )
 
     // Exercise
     delete err;
-
-    // Verify
-    mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.in_avail() );
-    CHECK_EQUAL( 0, errBuffer.in_avail() );
-
-    // Cleanup
-}
-
-TEST( ColorConsoleW, NoInit )
-{
-    //////////////////////////////////////////////////////////////////////////
-    // Creation
-    //
-
-    // Prepare
-
-    // Exercise
-    ColorConsole::ConsoleW* out = ConstructConsoleW( ColorConsole::ConsoleType::STD_OUTPUT );
-
-    // Verify
-    mock().checkExpectations();
-    CHECK_EQUAL( 0, outBuffer.in_avail() );
-
-    // Cleanup
-    mock().clear();
-
-    //////////////////////////////////////////////////////////////////////////
-    // Destruction
-    //
-
-    // Prepare
-
-    // Exercise
-    delete out;
 
     // Verify
     mock().checkExpectations();

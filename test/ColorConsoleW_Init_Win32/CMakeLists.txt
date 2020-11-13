@@ -8,12 +8,14 @@ project( Test.ColorConsoleW_Init.Win32 )
 
 set( PROD_DIR ${CMAKE_SOURCE_DIR}/lib )
 set( MOCKS_DIR ${CMAKE_SOURCE_DIR}/test/Mocks )
+set( HELPERS_DIR ${CMAKE_SOURCE_DIR}/test/TestHelpers )
 
 include_directories(
     ${PROD_DIR}/sources
     ${PROD_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${MOCKS_DIR}
+    ${HELPERS_DIR}
 )
 
 #
@@ -30,6 +32,7 @@ set( TEST_SRC_FILES
      ColorConsoleW_Init_Win32_test.cpp
      ${MOCKS_DIR}/Win32_mock.cpp
      ${MOCKS_DIR}/Win32_expect.cpp
+     ${HELPERS_DIR}/TestHelpers.cpp
 )
 
 add_definitions( "-DCOLORCONSOLE_REQUIRE_INITIALIZATION" )

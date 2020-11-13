@@ -8,12 +8,14 @@ project( Test.ColorConsoleW.ANSI )
 
 set( PROD_DIR ${CMAKE_SOURCE_DIR}/lib )
 set( MOCKS_DIR ${CMAKE_SOURCE_DIR}/test/Mocks )
+set( HELPERS_DIR ${CMAKE_SOURCE_DIR}/test/TestHelpers )
 
 include_directories(
     ${PROD_DIR}/sources
     ${PROD_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${MOCKS_DIR}
+    ${HELPERS_DIR}
 )
 
 #
@@ -28,6 +30,7 @@ set( PROD_SRC_FILES
 #
 set( TEST_SRC_FILES
      ColorConsoleW_ANSI_test.cpp
+     ${HELPERS_DIR}/TestHelpers.cpp
 )
 
 # Generate test target

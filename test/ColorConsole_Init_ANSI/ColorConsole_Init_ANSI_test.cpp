@@ -16,7 +16,7 @@
 
 #include "ColorConsole.hpp"
 
-#include <sstream>
+#include "TestHelpers.hpp"
 
 /*===========================================================================
  *                      COMMON TEST DEFINES & MACROS
@@ -28,8 +28,6 @@
 
 TEST_GROUP( ColorConsole )
 {
-    char tmpBuf[100] = "\0";
-
     std::streambuf *oldOutBuffer;
     std::streambuf *oldErrBuffer;
 
@@ -75,13 +73,6 @@ TEST_GROUP( ColorConsole )
         RedirectRealConsole();
         console->Initialize();
         RestoreRealConsole();
-    }
-
-    const char* readFromStringBuf( std::stringbuf& buf )
-    {
-        std::streamsize n = buf.sgetn( tmpBuf, 100 );
-        tmpBuf[n] = '\0';
-        return tmpBuf;
     }
 };
 
@@ -134,7 +125,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[49;1;31m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[49;1;31m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -150,7 +141,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -166,7 +157,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[103;36m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[103;36m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -182,7 +173,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[102;1;35m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[102;1;35m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -198,7 +189,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[45;33m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[45;33m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -214,7 +205,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -230,7 +221,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[107;30m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[107;30m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -246,7 +237,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -262,7 +253,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[49;1;37m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[49;1;37m", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -278,7 +269,7 @@ TEST( ColorConsole, Output_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer).c_str() );
     CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
@@ -329,7 +320,7 @@ TEST( ColorConsole, Error_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[49;1;31m", readFromStringBuf(errBuffer) );
+    STRCMP_EQUAL( "\033[49;1;31m", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -345,7 +336,7 @@ TEST( ColorConsole, Error_Init )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -362,7 +353,7 @@ TEST( ColorConsole, Error_Init )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
-    STRCMP_EQUAL( "\033[0m", readFromStringBuf(errBuffer) );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
 }
@@ -428,7 +419,7 @@ TEST( ColorConsole, Output_DoubleInit )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(outBuffer).c_str() );
     CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
@@ -496,7 +487,7 @@ TEST( ColorConsole, Error_DoubleInit )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
-    STRCMP_EQUAL( "\033[0m", readFromStringBuf(errBuffer) );
+    STRCMP_EQUAL( "\033[0m", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
 }

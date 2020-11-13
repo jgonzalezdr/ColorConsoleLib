@@ -18,7 +18,7 @@
 
 #include "Win32_expect.hpp"
 
-#include <sstream>
+#include "TestHelpers.hpp"
 
 /*===========================================================================
  *                      COMMON TEST DEFINES & MACROS
@@ -30,8 +30,6 @@
 
 TEST_GROUP( ColorConsole )
 {
-    char tmpBuf[100] = "\0";
-
     std::streambuf *oldOutBuffer;
     std::streambuf *oldErrBuffer;
 
@@ -74,13 +72,6 @@ TEST_GROUP( ColorConsole )
         RestoreRealConsole();
 
         return newConsole;
-    }
-
-    const char* readFromStringBuf( std::stringbuf& buf )
-    {
-        std::streamsize n = buf.sgetn( tmpBuf, 100 );
-        tmpBuf[n] = '\0';
-        return tmpBuf;
     }
 };
 
@@ -141,7 +132,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -157,7 +148,7 @@ TEST( ColorConsole, Output )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "\n", readFromStringBuf(outBuffer) );
+    STRCMP_EQUAL( "\n", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -351,7 +342,7 @@ TEST( ColorConsole, Error )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer) );
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer).c_str() );
 
     // Cleanup
     mock().clear();
