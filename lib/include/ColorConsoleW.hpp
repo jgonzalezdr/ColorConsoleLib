@@ -77,12 +77,252 @@ public:
     }
 
     /**
+     * Inserter for ios manipulators.
+     * 
+     * @param pf [in] Manipulator
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( std::wios& (*pf)(std::wios&) )
+    {
+        (*pf)(*this);
+        return *this;
+    }
+
+    /**
+     * Inserter for ios_base manipulators.
+     * 
+     * @param pf [in] Manipulator
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( std::ios_base& (*pf)(std::ios_base&) )
+    {
+        (*pf)(*this);
+        return *this;
+    }
+
+    /**
+     * Inserter for longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( long n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( unsigned long n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for bools.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( bool n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for shorts.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( short n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned shorts.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( unsigned short n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for ints.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( int n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned ints.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( unsigned int n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for long longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( long long n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned long longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( unsigned long long n )
+    {
+        *(static_cast<std::wostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for doubles.
+     * 
+     * @param f [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( double f )
+    {
+        *(static_cast<std::wostream*>(this)) << f;
+        return *this;
+    }
+
+    /**
+     * Inserter for floats.
+     * 
+     * @param f [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( float f )
+    {
+        *(static_cast<std::wostream*>(this)) << f;
+        return *this;
+    }
+
+    /**
+     * Inserter for long doubles.
+     * 
+     * @param f [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( long double f )
+    {
+        *(static_cast<std::wostream*>(this)) << f;
+        return *this;
+    }
+
+    /**
+     * Inserter for pointers.
+     * 
+     * @param p [in] Pointer
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( const void *p )
+    {
+        *(static_cast<std::wostream*>(this)) << p;
+        return *this;
+    }
+
+    /**
+     * Inserter for chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( char c )
+    {
+        *(static_cast<std::wostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( unsigned char c )
+    {
+        *(static_cast<std::wostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
+     * Inserter for signed chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( signed char c )
+    {
+        *(static_cast<std::wostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
+     * Inserter for wide chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    ConsoleW& operator<<( wchar_t c )
+    {
+        *(static_cast<std::wostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
      * Inserter for text strings.
      * 
      * @param text [in] Text string
      * @return The ColorConsoleW object (*this)
      */
-    ConsoleW& operator<<( const wchar_t* text )
+    ConsoleW& operator<<( const wchar_t *text )
+    {
+        *(static_cast<std::wostream*>(this)) << text;
+        return *this;
+    }
+
+    /**
+     * Inserter for text strings.
+     * 
+     * @param text [in] Text string
+     * @return The ColorConsoleW object (*this)
+     */
+    ConsoleW& operator<<( const char *text )
     {
         *(static_cast<std::wostream*>(this)) << text;
         return *this;

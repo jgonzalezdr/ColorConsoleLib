@@ -147,6 +147,22 @@ TEST( ColorConsole, Output )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
+    // Write end-of-line
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << ColorConsole::endl;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\n", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
     // Set foreground color dark cyan and background color yellow
     //
 

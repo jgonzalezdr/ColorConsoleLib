@@ -96,6 +96,7 @@ TEST( ColorConsole, Output )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::STD_OUTPUT ), static_cast<int>( out->get_console_type() ) );
 
     // Cleanup
     mock().clear();
@@ -128,6 +129,22 @@ TEST( ColorConsole, Output )
     // Verify
     mock().checkExpectations();
     STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write end-of-line
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << ColorConsole::endl;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\033[K\n", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
@@ -389,7 +406,7 @@ TEST( ColorConsole, Output )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
-    // Reset color combined with color definition 
+    // Reset color combined with color definition
     //
 
     // Prepare
@@ -467,6 +484,7 @@ TEST( ColorConsole, Error )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, errBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::STD_ERROR ), static_cast<int>( err->get_console_type() ) );
 
     // Cleanup
     mock().clear();

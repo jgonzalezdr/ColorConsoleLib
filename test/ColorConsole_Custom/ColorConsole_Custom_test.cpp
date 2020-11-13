@@ -63,6 +63,7 @@ TEST( ColorConsole, Custom_Color )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM_COLOR ), static_cast<int>( out->get_console_type() ) );
 
     // Cleanup
     mock().clear();
@@ -84,7 +85,7 @@ TEST( ColorConsole, Custom_Color )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
-    // Write something
+    // Write string
     //
 
     // Prepare
@@ -95,6 +96,294 @@ TEST( ColorConsole, Custom_Color )
     // Verify
     mock().checkExpectations();
     STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write string
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned char*) "Something unsigned";
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "Something unsigned", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write string
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (signed char*) "Something signed";
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "Something signed", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write int
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (int) -87736663;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "-87736663", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned int
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned int) 234905874u;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "234905874", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write short
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (short) -8763;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "-8763", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned short
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned short) 23874u;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "23874", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (long) -997646634l;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "-997646634", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned long) 779938934ul;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "779938934", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write long long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (long long) -9976777677946634ll;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "-9976777677946634", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned long long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned long long) 779786565449398934ull;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "779786565449398934", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (char) 'A';
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "A", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned char) '0';
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "0", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write signed char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (signed char) '0';
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "0", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write bool
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << true << "-" << false;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "1-0", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write float
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (float) -163.873f;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "-163.873", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write double
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << std::fixed << (double) 877344.177654;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "877344.177654", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write long double
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (long double) 238489823163.87649918l;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "238489823163.876499", readFromStringBuf(outBuffer) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write pointer
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (void*) 0x01987674;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "0x1987674", readFromStringBuf(outBuffer) );
 
     // Cleanup
     mock().clear();
@@ -429,6 +718,7 @@ TEST( ColorConsole, Custom_NoColor )
 
     // Exercise
     ColorConsole::Console* out = new ColorConsole::Console( &outBuffer, false );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM_NOCOLOR ), static_cast<int>( out->get_console_type() ) );
 
     // Verify
     mock().checkExpectations();

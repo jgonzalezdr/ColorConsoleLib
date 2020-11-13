@@ -48,7 +48,7 @@ if( COVERAGE AND NOT MSVC )
     set( GENHTML_ARGS ${GENHTML_ARGS} ${LCOV_COMMON_ARGS} )
 
     if( NOT COVERAGE_INCLUDED )
-        set( COVERAGE_INCLUDED \"*/lib/sources/*\" )
+        set( COVERAGE_INCLUDED \"*/lib/*\" )
     endif()
 
     add_custom_target( coverage_clean

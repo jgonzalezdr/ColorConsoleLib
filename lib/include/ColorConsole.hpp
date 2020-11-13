@@ -77,12 +77,252 @@ public:
     }
 
     /**
+     * Inserter for ios manipulators.
+     * 
+     * @param pf [in] Manipulator
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( std::ios& (*pf)(std::ios&) )
+    {
+        (*pf)(*this);
+        return *this;
+    }
+
+    /**
+     * Inserter for ios_base manipulators.
+     * 
+     * @param pf [in] Manipulator
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( std::ios_base& (*pf)(std::ios_base&) )
+    {
+        (*pf)(*this);
+        return *this;
+    }
+
+    /**
+     * Inserter for longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( long n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( unsigned long n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for bools.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( bool n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for shorts.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( short n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned shorts.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( unsigned short n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for ints.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( int n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned ints.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( unsigned int n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for long longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( long long n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned long longs.
+     * 
+     * @param n [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( unsigned long long n )
+    {
+        *(static_cast<std::ostream*>(this)) << n;
+        return *this;
+    }
+
+    /**
+     * Inserter for doubles.
+     * 
+     * @param f [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( double f )
+    {
+        *(static_cast<std::ostream*>(this)) << f;
+        return *this;
+    }
+
+    /**
+     * Inserter for floats.
+     * 
+     * @param f [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( float f )
+    {
+        *(static_cast<std::ostream*>(this)) << f;
+        return *this;
+    }
+
+    /**
+     * Inserter for long doubles.
+     * 
+     * @param f [in] Number
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( long double f )
+    {
+        *(static_cast<std::ostream*>(this)) << f;
+        return *this;
+    }
+
+    /**
+     * Inserter for pointers.
+     * 
+     * @param p [in] Pointer
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( const void *p )
+    {
+        *(static_cast<std::ostream*>(this)) << p;
+        return *this;
+    }
+
+    /**
+     * Inserter for chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( char c )
+    {
+        *(static_cast<std::ostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
+     * Inserter for unsigned chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( unsigned char c )
+    {
+        *(static_cast<std::ostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
+     * Inserter for signed chars.
+     * 
+     * @param c [in] Character
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( signed char c )
+    {
+        *(static_cast<std::ostream*>(this)) << c;
+        return *this;
+    }
+
+    /**
      * Inserter for text strings.
      * 
      * @param text [in] Text string
      * @return The ColorConsole object (*this)
      */
-    Console& operator<<( const char* text )
+    Console& operator<<( const char *text )
+    {
+        *(static_cast<std::ostream*>(this)) << text;
+        return *this;
+    }
+
+    /**
+     * Inserter for text strings.
+     * 
+     * @param text [in] Text string
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( const unsigned char *text )
+    {
+        *(static_cast<std::ostream*>(this)) << text;
+        return *this;
+    }
+
+    /**
+     * Inserter for text strings.
+     * 
+     * @param text [in] Text string
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( const signed char *text )
     {
         *(static_cast<std::ostream*>(this)) << text;
         return *this;

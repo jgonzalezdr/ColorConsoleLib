@@ -70,6 +70,7 @@ TEST( ColorConsoleW, Custom_Color )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM_COLOR ), static_cast<int>( out->get_console_type() ) );
 
     // Cleanup
     mock().clear();
@@ -91,7 +92,7 @@ TEST( ColorConsoleW, Custom_Color )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
-    // Write something
+    // Write narrow string
     //
 
     // Prepare
@@ -102,6 +103,310 @@ TEST( ColorConsoleW, Custom_Color )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, wcscmp( L"Something", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write wide string
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << L"Something else";
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"Something else", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write int
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (int) -87736663;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"-87736663", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned int
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned int) 234905874u;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"234905874", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write short
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (short) -8763;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"-8763", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned short
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned short) 23874u;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"23874", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (long) -997646634l;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"-997646634", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned long) 779938934ul;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"779938934", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write long long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (long long) -9976777677946634ll;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"-9976777677946634", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned long long
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned long long) 779786565449398934ull;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"779786565449398934", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (char) 'A';
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"A", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write unsigned char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (unsigned char) '0';
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"48", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write signed char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (signed char) 'A';
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"65", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write wide char
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (wchar_t) L'@';
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"@", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write bool
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << true << "-" << false;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"1-0", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write float
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (float) -163.873f;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"-163.873", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write double
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << std::fixed << (double) 877344.177654;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"877344.177654", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write long double
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (long double) 238489823163.87649918l;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"238489823163.876499", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write pointer
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (void*) 0x01987674;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"0x1987674", readFromStringBuf(outBuffer) ) );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write hex int
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << std::hex << std::uppercase << (unsigned int) 0x0765AF12;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, wcscmp( L"765AF12", readFromStringBuf(outBuffer) ) );
 
     // Cleanup
     mock().clear();
@@ -440,6 +745,7 @@ TEST( ColorConsoleW, Custom_NoColor )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM_NOCOLOR ), static_cast<int>( out->get_console_type() ) );
 
     // Cleanup
     mock().clear();
