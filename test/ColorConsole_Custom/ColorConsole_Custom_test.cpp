@@ -358,7 +358,7 @@ TEST( ColorConsole, Custom_Color )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "238489823163.876499", readFromStringBuf(outBuffer).c_str() );
+    STRCMP_CONTAINS( "238489823163.87649", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
@@ -374,7 +374,7 @@ TEST( ColorConsole, Custom_Color )
 
     // Verify
     mock().checkExpectations();
-    STRCMP_EQUAL( "0x1987674", readFromStringBuf(outBuffer).c_str() );
+    STRCMP_CONTAINS( "1987674", readFromStringBuf(outBuffer).c_str() );
 
     // Cleanup
     mock().clear();
