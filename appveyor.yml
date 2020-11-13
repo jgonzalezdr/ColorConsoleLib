@@ -58,11 +58,11 @@ for:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     environment:
-      CPPUTEST_HOME: C:\cpputest-3.9.alpha0
+      CPPUTEST_HOME: C:\cpputest-4.0-gdr0
       LCOV_HOME: C:\lcov-1.15.alpha1w
       CODECOV_FLAG: --flag
     cache:
-      - C:\cpputest-3.9.alpha0 -> appveyor.yml
+      - C:\cpputest-4.0-gdr0 -> appveyor.yml
       - C:\Strawberry
       - C:\lcov-1.15.alpha1w -> appveyor.yml
       - C:\TDM-GCC-64\ -> appveyor.yml
@@ -78,12 +78,12 @@ for:
       only:
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
     environment:
-      CPPUTEST_HOME: /home/appveyor/cpputest-3.9.alpha0
+      CPPUTEST_HOME: /home/appveyor/cpputest-4.0-gdr0
       LCOV_HOME: /home/appveyor/lcov-1.15
       CODECOV_HOME: /home/appveyor/codecov
       CODECOV_FLAG: -F
     cache:
-      - /home/appveyor/cpputest-3.9.alpha0 -> appveyor.yml
+      - /home/appveyor/cpputest-4.0-gdr0 -> appveyor.yml
       - /home/appveyor/lcov-1.15 -> appveyor.yml
     install:
       - ps: if (!($env:Test -eq 'False') -and !(Test-Path -Path "$env:CPPUTEST_HOME")) { ci/appveyor_ci_install_cpputest_linux.ps1 }
