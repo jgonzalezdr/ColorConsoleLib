@@ -26,7 +26,7 @@ int main( int argc, const char* argv[] )
 }
 ```
 
-There are 16 foreground **Color**s (which names start with `FG_`) that can be mixed with 16 background **Color**s (which names start with `BG_`) using the _OR_ operation (`|`).
+There are 16 foreground **Color**s (which names start with `FG_`) that can be mixed with 17 background **Color**s (which names start with `BG_`) using the _OR_ operation (`|`).
 
 ![Color Table](https://github.com/jgonzalezdr/ColorConsoleLib/blob/gh-pages/images/ColorTable.png?raw=true)
 
@@ -38,7 +38,7 @@ There are 16 foreground **Color**s (which names start with `FG_`) that can be mi
 
 The special **Color** `RESET` can be used to return the console to the original "non-colorized" mode.
 
-Additionally, a new **set_color()** function has been added to the output streams which behaves just like inserting a **Color** in the stream.
+Alternatively, the **set_color()** member function can be used, which behaves just like inserting a **Color** in the stream.
 
 ### Example Output
 
