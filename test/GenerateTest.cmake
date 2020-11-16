@@ -18,7 +18,7 @@ add_executable( ${PROJECT_NAME} EXCLUDE_FROM_ALL ${PROD_SRC_FILES} ${TEST_SRC_FI
 
 target_link_libraries( ${PROJECT_NAME} ${CppUTest_LIBRARIES} )
 
-add_dependencies( build_tests ${PROJECT_NAME} )
+add_dependencies( ${TARGET_NAMESPACE}build_tests ${PROJECT_NAME} )
 
 if( CI_MODE )
     set( TEST_ARGS -ojunit -v )

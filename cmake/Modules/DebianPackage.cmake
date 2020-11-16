@@ -272,11 +272,11 @@ function( add_debian_package_targets )
 
     configure_file( ${DEBIAN_PACKAGE_TEMPLATE_DIR}/GenerateDebianPackage.in.cmake GenerateDebianPackage.cmake @ONLY )
 
-    add_custom_target( debian_package_binary
+    add_custom_target( ${TARGET_NAMESPACE}debian_package_binary
                        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target package_source
                        COMMAND ${CMAKE_COMMAND} -DDEBIAN_PACKAGE_BINARY=ON -P ${CMAKE_CURRENT_BINARY_DIR}/GenerateDebianPackage.cmake )
 
-    add_custom_target( debian_package_source
+    add_custom_target( ${TARGET_NAMESPACE}debian_package_source
                        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target package_source
                        COMMAND ${CMAKE_COMMAND} -DDEBIAN_PACKAGE_BINARY=OFF -P ${CMAKE_CURRENT_BINARY_DIR}/GenerateDebianPackage.cmake )
 

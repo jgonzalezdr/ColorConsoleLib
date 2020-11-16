@@ -31,7 +31,7 @@ endif()
 
 add_executable( ${PROJECT_NAME} ${SRC_LIST} )
 
-add_dependencies( build ${PROJECT_NAME} )
+add_dependencies( ${TARGET_NAMESPACE}build_examples ${PROJECT_NAME} )
 
 #
 # Executable properties
@@ -51,7 +51,7 @@ if( BUILD_SHARED_LIB )
     add_custom_target( ${PROJECT_NAME}_CopySharedLibs ALL
                        DEPENDS ColorConsole
                        COMMAND cmake -E copy "$<TARGET_FILE:ColorConsole>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
-    add_dependencies( build ${PROJECT_NAME}_CopySharedLibs )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME}_CopySharedLibs )
 elseif( BUILD_STATIC_LIB )
     target_link_libraries( ${PROJECT_NAME} ColorConsole_static )
 endif()

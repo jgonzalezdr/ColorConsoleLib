@@ -35,7 +35,7 @@ if( WIN32 AND NOT MSVC )
     target_link_options( ${PROJECT_NAME} PRIVATE "-municode" )
 endif()
 
-add_dependencies( build ${PROJECT_NAME} )
+add_dependencies( ${TARGET_NAMESPACE}build_examples ${PROJECT_NAME} )
 
 #
 # Executable properties
@@ -57,7 +57,7 @@ elseif( BUILD_SHARED_LIB )
     add_custom_target( ${PROJECT_NAME}_CopySharedLibs ALL
                        DEPENDS ColorConsole
                        COMMAND cmake -E copy "$<TARGET_FILE:ColorConsole>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
-    add_dependencies( build ${PROJECT_NAME}_CopySharedLibs )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME}_CopySharedLibs )
 endif()
 
 #

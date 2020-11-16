@@ -62,6 +62,10 @@ if( CppUTest_DEBUG_LIB_PATH )
     set_target_properties( CppUTest PROPERTIES IMPORTED_LOCATION_DEBUG ${CppUTest_DEBUG_LIB_PATH} )
 endif()
 
+#
+# Find CppUTestExt debug library
+#
+
 list( TRANSFORM CPPUTESTEXT_LIBNAME APPEND "d" OUTPUT_VARIABLE CPPUTESTEXT_DBG_LIBNAME )
 find_library( CppUTestExt_DEBUG_LIB_PATH NAMES ${CPPUTESTEXT_DBG_LIBNAME} HINTS ${CppUTest_LIBRARY_DIR} NO_DEFAULT_PATH )
 mark_as_advanced( CppUTestExt_DEBUG_LIB_PATH  )
@@ -89,12 +93,3 @@ if( WIN32 )
     target_link_libraries( CppUTest INTERFACE winmm.lib )
 endif()
 
-# set( CppUTest_INCLUDE_DIR ${CppUTest_ROOT}/include )
-# set( CppUTest_LIBRARY ${CppUTest_LIB_PATH} )
-# set( CppUTestExt_LIBRARY ${CppUTestExt_LIB_PATH} )
-# if( DEFINED CppUTest_DEBUG_LIB_PATH AND (NOT CppUTest_DEBUG_LIB_PATH MATCHES "^.*-NOTFOUND$" ) )
-#     set( CppUTest_DEBUG_LIBRARY ${CppUTest_DEBUG_LIB_PATH} )
-# endif()
-# if( DEFINED CppUTestExt_DEBUG_LIB_PATH AND (NOT CppUTestExt_DEBUG_LIB_PATH MATCHES "^.*-NOTFOUND$" ) )
-#     set( CppUTestExt_DEBUG_LIBRARY ${CppUTestExt_DEBUG_LIB_PATH} )
-# endif()

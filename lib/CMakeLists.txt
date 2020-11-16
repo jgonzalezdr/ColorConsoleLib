@@ -2,12 +2,26 @@ cmake_minimum_required( VERSION 3.13 )
 
 project( ColorConsole VERSION 1.0.0 )
 
+if( NOT CMAKE_PROJECT_NAME MATCHES "${PROJECT_NAME}.*" )
+
+    # Seems like we are being imported into another project
+
+    if( TARGET_NAMESPACE )
+        set( TARGET_NAMESPACE "${TARGET_NAMESPACE}." )
+    endif()
+
+    add_custom_target( ${TARGET_NAMESPACE}build )
+
+    unset( CMAKE_MODULE_PATH )
+
+endif()
+
 option( BUILD_STATIC_LIB "Build static library" ON )
 option( BUILD_SHARED_LIB "Build shared library" ON )
 option( REQUIRE_INITIALIZATION "Make initialization mandatory" OFF )
 option( FORCE_ANSI_ESCAPE_CODES "Force using ANSI escape codes in Windows" OFF )
 
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/Modules/" )
 
 if( MSVC )
     include( VisualStudioHelper )
@@ -88,7 +102,7 @@ if ( BUILD_SHARED_LIB )
 
     target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
-    add_dependencies( build ${PROJECT_NAME} )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME} )
 
     if( REQUIRE_INITIALIZATION OR WIN32 )
         target_compile_definitions( ${PROJECT_NAME} PRIVATE "COLORCONSOLE_REQUIRE_INITIALIZATION" )
@@ -116,7 +130,7 @@ if ( BUILD_STATIC_LIB )
 
     target_include_directories( ${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
-    add_dependencies( build ${PROJECT_NAME}_static )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME}_static )
 
     if( REQUIRE_INITIALIZATION )
         target_compile_definitions( ${PROJECT_NAME}_static PRIVATE "COLORCONSOLE_REQUIRE_INITIALIZATION" )

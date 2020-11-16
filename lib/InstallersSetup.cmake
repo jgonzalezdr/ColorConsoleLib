@@ -92,6 +92,6 @@ if( ENABLE_INSTALLER )
         set( DEBIAN_PACKAGE_DISTRIBUTIONS "bionic" )
 
         add_debian_package_targets()
-        add_dependencies( debian_package_binary build )
+        add_dependencies( ${TARGET_NAMESPACE}debian_package_binary ${TARGET_NAMESPACE}build )
     endif()
 endif()

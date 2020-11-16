@@ -4,8 +4,10 @@ endif()
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
 
+add_custom_target( ${TARGET_NAMESPACE}build_tests )
+
 # Test errors are ignored with MSVC to avoid the IDE nagging
-add_custom_target( run_tests COMMAND ctest -V ${IGNORE_ERROR} DEPENDS build_tests )
+add_custom_target( ${TARGET_NAMESPACE}run_tests COMMAND ctest -V ${IGNORE_ERROR} DEPENDS build_tests )
 
 #
 # Coverage with GCC/MinGW
@@ -51,44 +53,44 @@ if( COVERAGE AND NOT MSVC )
         set( COVERAGE_INCLUDED \"*/lib/*\" )
     endif()
 
-    add_custom_target( coverage_clean
+    add_custom_target( ${TARGET_NAMESPACE}coverage_clean
                        COMMAND ${CMAKE_COMMAND} -E make_directory ${COVDST_DIR}
                        COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} -z -d ${CMAKE_BINARY_DIR}
-                       DEPENDS build_tests )
+                       DEPENDS ${TARGET_NAMESPACE}build_tests )
 
-    add_custom_target( coverage_initial
+    add_custom_target( ${TARGET_NAMESPACE}coverage_initial
                        COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -c -i --no-external -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_base.info
-                       DEPENDS coverage_clean )
+                       DEPENDS ${TARGET_NAMESPACE}coverage_clean )
 
-    add_custom_target( coverage_run_tests
+    add_custom_target( ${TARGET_NAMESPACE}coverage_run_tests
                        COMMAND ctest -V ${IGNORE_ERROR}
-                       DEPENDS coverage_initial )
+                       DEPENDS ${TARGET_NAMESPACE}coverage_initial )
 
-    add_custom_target( coverage_process_test_data
+    add_custom_target( ${TARGET_NAMESPACE}coverage_process_test_data
                        COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -c --no-external -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_test.info
-                       DEPENDS coverage_run_tests )
+                       DEPENDS ${TARGET_NAMESPACE}coverage_run_tests )
 
-    add_custom_target( coverage_combine
+    add_custom_target( ${TARGET_NAMESPACE}coverage_combine
                        COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -a ${COVDST_DIR}/app_base.info -a ${COVDST_DIR}/app_test.info -o ${COVDST_DIR}/app_full.info
-                       DEPENDS coverage_process_test_data )
+                       DEPENDS ${TARGET_NAMESPACE}coverage_process_test_data )
 
     if( COVERAGE_EXCLUDED )
-        add_custom_target( coverage_filter_included
+        add_custom_target( ${TARGET_NAMESPACE}coverage_filter_included
                            COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -e ${COVDST_DIR}/app_full.info -o ${COVDST_DIR}/app_stripped_i.info ${COVERAGE_INCLUDED}
-                           DEPENDS coverage_combine )
+                           DEPENDS ${TARGET_NAMESPACE}coverage_combine )
 
-        add_custom_target( coverage_process
+        add_custom_target( ${TARGET_NAMESPACE}coverage_process
                            COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -r ${COVDST_DIR}/app_stripped_i.info -o ${COVDST_DIR}/app_stripped.info ${COVERAGE_EXCLUDED}
-                           DEPENDS coverage_filter_included )
+                           DEPENDS ${TARGET_NAMESPACE}coverage_filter_included )
     else()
-        add_custom_target( coverage_process
+        add_custom_target( ${TARGET_NAMESPACE}coverage_process
                            COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -e ${COVDST_DIR}/app_full.info -o ${COVDST_DIR}/app_stripped.info ${COVERAGE_INCLUDED}
-                           DEPENDS coverage_combine )
+                           DEPENDS ${TARGET_NAMESPACE}coverage_combine )
     endif()
 
-    add_custom_target( coverage_report
+    add_custom_target( ${TARGET_NAMESPACE}coverage_report
                        COMMAND ${PERL_EXECUTABLE} ${GENHTML_EXECUTABLE} ${GENHTML_ARGS} -s ${COVDST_DIR}/app_stripped.info -o ${COVDST_DIR} --demangle-cpp --title "Unit Tests" --rc genhtml_charset=cp-1252
-                       DEPENDS coverage_process )
+                       DEPENDS ${TARGET_NAMESPACE}coverage_process )
 
 endif()
 
@@ -129,8 +131,8 @@ if( COVERAGE AND MSVC )
     string( REGEX REPLACE "/" "\\\\" COVSRC_PATH ${COVSRC_PATH} )
     string( REGEX REPLACE "/" "\\\\" COVDST_DIR ${COVDST_DIR} )
 
-    add_custom_target( run_coverage
+    add_custom_target( ${TARGET_NAMESPACE}run_coverage
                        COMMAND ${OPENCPPCOVERAGE} ${OPENCPPCOV_ARGS} --export_type ${COV_OUTTYPE}:${COVDST_DIR} --sources ${COVSRC_PATH} -- ${CMAKE_CTEST_COMMAND} ${CTEST_ARGS}
-                       DEPENDS build_tests )
+                       DEPENDS ${TARGET_NAMESPACE}build_tests )
 
 endif()
