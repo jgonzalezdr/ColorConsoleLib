@@ -64,12 +64,14 @@ else()
     set( PRINTED_TARGET_NAMESPACE "{empty}" )
 endif()
 
+string( REGEX REPLACE "\.Top$" "" PRINTED_PROJECT_NAME ${PROJECT_NAME} )
+
 set( CONFIG_MSG "
 --------------------------------------------------------------------------
                             CONFIGURATION
 --------------------------------------------------------------------------
 
-Build Options:" )
+Build Options for ${PRINTED_PROJECT_NAME}:" )
 
 if( DEFINED CMAKE_BUILD_TYPE )
 set( CONFIG_MSG "${CONFIG_MSG}

@@ -6,14 +6,9 @@ project( Test.ColorConsole.ANSI )
 # Test configuration
 #
 
-set( PROD_DIR ${CMAKE_SOURCE_DIR}/lib )
-set( MOCKS_DIR ${CMAKE_SOURCE_DIR}/test/Mocks )
-set( HELPERS_DIR ${CMAKE_SOURCE_DIR}/test/TestHelpers )
-
 include_directories(
-    ${PROD_DIR}/sources
-    ${PROD_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROD_SOURCE_DIR}/sources
+    ${PROD_SOURCE_DIR}/include
     ${MOCKS_DIR}
     ${HELPERS_DIR}
 )
@@ -22,7 +17,7 @@ include_directories(
 # Add your production source files to the following list
 #
 set( PROD_SRC_FILES
-     ${PROD_DIR}/sources/ColorConsole.cpp
+     ${PROD_SOURCE_DIR}/sources/ColorConsole.cpp
 )
 
 #
