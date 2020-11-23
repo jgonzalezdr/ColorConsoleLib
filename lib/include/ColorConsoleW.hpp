@@ -34,13 +34,13 @@ public:
      * Constructor for custom streams.
      *
      * Colorization of custom streams (if enabled) will be performed using ANSI color escape codes.
-     * 
+     *
      * Custom streams are mostly intended for testing software that writes on color consoles.
-     * 
+     *
      * param sb [in] Stream buffer where the strem will write to
      * param color [in] Indicates if colorization is enabled
      *
-     * @param consoleType [in] Console to colorize
+     * @param[inout] consoleType Console to colorize
      */
     ConsoleW( std::wstreambuf *sb, bool color = true );
 
@@ -52,22 +52,22 @@ public:
     /**
      * Sets (or resets) the console color.
      *
-     * @param color [in] Color to be set, or RESET to reset to default value
+     * @param[in] color Color to be set, or RESET to reset to default value
      */
     void set_color( Color color );
 
     /**
      * Sets (or resets) the console color.
      *
-     * @param color [in] Color to be set, or RESET to reset to default value
+     * @param[in] color Color to be set, or RESET to reset to default value
      * @return The ColorConsoleW object (*this)
      */
     ConsoleW& operator<<( Color color );
 
     /**
      * Inserter for ostream manipulators.
-     * 
-     * @param pf [in] Manipulator
+     *
+     * @param[in] pf Manipulator
      * @return The ColorConsoleW object (*this)
      */
     ConsoleW& operator<<( std::wostream& (*pf)(std::wostream&) )
@@ -78,8 +78,8 @@ public:
 
     /**
      * Inserter for ios manipulators.
-     * 
-     * @param pf [in] Manipulator
+     *
+     * @param[in] pf Manipulator
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( std::wios& (*pf)(std::wios&) )
@@ -90,8 +90,8 @@ public:
 
     /**
      * Inserter for ios_base manipulators.
-     * 
-     * @param pf [in] Manipulator
+     *
+     * @param[in] pf Manipulator
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( std::ios_base& (*pf)(std::ios_base&) )
@@ -102,8 +102,8 @@ public:
 
     /**
      * Inserter for longs.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( long n )
@@ -114,8 +114,8 @@ public:
 
     /**
      * Inserter for unsigned longs.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( unsigned long n )
@@ -126,8 +126,8 @@ public:
 
     /**
      * Inserter for bools.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( bool n )
@@ -138,8 +138,8 @@ public:
 
     /**
      * Inserter for shorts.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( short n )
@@ -150,8 +150,8 @@ public:
 
     /**
      * Inserter for unsigned shorts.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( unsigned short n )
@@ -162,8 +162,8 @@ public:
 
     /**
      * Inserter for ints.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( int n )
@@ -174,8 +174,8 @@ public:
 
     /**
      * Inserter for unsigned ints.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( unsigned int n )
@@ -186,8 +186,8 @@ public:
 
     /**
      * Inserter for long longs.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( long long n )
@@ -198,8 +198,8 @@ public:
 
     /**
      * Inserter for unsigned long longs.
-     * 
-     * @param n [in] Number
+     *
+     * @param[in] n Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( unsigned long long n )
@@ -210,8 +210,8 @@ public:
 
     /**
      * Inserter for doubles.
-     * 
-     * @param f [in] Number
+     *
+     * @param[in] f Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( double f )
@@ -222,8 +222,8 @@ public:
 
     /**
      * Inserter for floats.
-     * 
-     * @param f [in] Number
+     *
+     * @param[in] f Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( float f )
@@ -234,8 +234,8 @@ public:
 
     /**
      * Inserter for long doubles.
-     * 
-     * @param f [in] Number
+     *
+     * @param[in] f Number
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( long double f )
@@ -246,8 +246,8 @@ public:
 
     /**
      * Inserter for pointers.
-     * 
-     * @param p [in] Pointer
+     *
+     * @param[in] p Pointer
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( const void *p )
@@ -258,8 +258,8 @@ public:
 
     /**
      * Inserter for chars.
-     * 
-     * @param c [in] Character
+     *
+     * @param[in] c Character
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( char c )
@@ -270,8 +270,8 @@ public:
 
     /**
      * Inserter for unsigned chars.
-     * 
-     * @param c [in] Character
+     *
+     * @param[in] c Character
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( unsigned char c )
@@ -282,8 +282,8 @@ public:
 
     /**
      * Inserter for signed chars.
-     * 
-     * @param c [in] Character
+     *
+     * @param[in] c Character
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( signed char c )
@@ -294,8 +294,8 @@ public:
 
     /**
      * Inserter for wide chars.
-     * 
-     * @param c [in] Character
+     *
+     * @param[in] c Character
      * @return The ColorConsole object (*this)
      */
     ConsoleW& operator<<( wchar_t c )
@@ -306,8 +306,8 @@ public:
 
     /**
      * Inserter for text strings.
-     * 
-     * @param text [in] Text string
+     *
+     * @param[in] text Text string
      * @return The ColorConsoleW object (*this)
      */
     ConsoleW& operator<<( const wchar_t *text )
@@ -318,8 +318,8 @@ public:
 
     /**
      * Inserter for text strings.
-     * 
-     * @param text [in] Text string
+     *
+     * @param[in] text Text string
      * @return The ColorConsoleW object (*this)
      */
     ConsoleW& operator<<( const char *text )
@@ -330,7 +330,7 @@ public:
 
     /**
      * Returns the console type.
-     * 
+     *
      * @return The console type
      */
     ConsoleType get_console_type() const noexcept
@@ -357,7 +357,7 @@ private:
     /**
      * Constructor for standard streams.
      *
-     * @param consoleType [in] Console to colorize
+     * @param[in] consoleType Console to colorize
      */
     ConsoleW( ConsoleType consoleType );
 
