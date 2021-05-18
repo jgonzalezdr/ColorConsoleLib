@@ -40,7 +40,7 @@ public:
      * param sb [in] Stream buffer where the strem will write to
      * param color [in] Indicates if colorization is enabled
      *
-     * @param[inout] consoleType Console to colorize
+     * @param[in,out] consoleType Console to colorize
      */
     ConsoleW( std::wstreambuf *sb, bool color = true );
 
