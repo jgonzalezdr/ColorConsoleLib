@@ -15,7 +15,7 @@ int main( int argc, const char* argv[] )
 {
     Console::Init();
 
-    cout << "cout: Initial color (non-colorized)" << endl << endl;
+    cout << "cout: Initial color (non-colored)" << endl << endl;
 
     cout << Color::FG_LIGHT_BLUE;
     cout << "cout: Light blue" << endl;
@@ -92,7 +92,7 @@ int main( int argc, const char* argv[] )
 
     cout << Color::RESET;
     cout << endl;
-    cout << "cout: Reset to initial color (non-colorized)";
+    cout << "cout: Reset to initial color (non-colored)";
     cout << endl;
 
     cout << endl;

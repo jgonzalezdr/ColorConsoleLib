@@ -51,17 +51,17 @@ ConsoleW ConsoleW::wcerr( ConsoleType::STD_ERROR );
 void ConsoleW::Init()
 {
 #if defined(COLORCONSOLE_REQUIRE_INITIALIZATION) && !defined(UNIT_TEST)
-    wcout.Initialize();
-    wcerr.Initialize();
+    wcout.initialize();
+    wcerr.initialize();
 #endif
 }
 // LCOV_EXCL_STOP
 
 ConsoleW::ConsoleW( ConsoleType consoleType )
 #ifdef COLORCONSOLE_REQUIRE_INITIALIZATION
-: std::wostream( NULL )
+: std::wostream( NULL ), m_coloringEnabled( true )
 #else
-: std::wostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::wcerr.rdbuf() : std::wcout.rdbuf() )
+: std::wostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::wcerr.rdbuf() : std::wcout.rdbuf() ), m_coloringEnabled( true )
 #endif
 {
     m_consoleType = consoleType;
@@ -71,14 +71,14 @@ ConsoleW::ConsoleW( ConsoleType consoleType )
 #endif
 
 #ifndef COLORCONSOLE_REQUIRE_INITIALIZATION
-    Initialize();
+    initialize();
 #endif
 }
 
-ConsoleW::ConsoleW( std::wstreambuf *sb, bool color )
-: std::wostream( sb )
+ConsoleW::ConsoleW( std::wstreambuf *sb, bool enableColoring )
+: std::wostream( sb ), m_coloringEnabled( enableColoring )
 {
-    m_consoleType = color ? ConsoleType::CUSTOM_COLOR : ConsoleType::CUSTOM_NOCOLOR;
+    m_consoleType = ConsoleType::CUSTOM;
 
 #ifdef WIN32
     m_handle = INVALID_HANDLE_VALUE;
@@ -92,24 +92,24 @@ ConsoleW::~ConsoleW()
     {
         flush();
 
-        if( m_handle != INVALID_HANDLE_VALUE )
+        if( ( m_handle != INVALID_HANDLE_VALUE ) && m_coloringEnabled )
         {
             SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
         }
     }
-    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
+    else if( m_coloringEnabled )
     {
         setAnsiColor( this, Color::RESET );
     }
 #else
-    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
+    if( m_coloringEnabled )
     {
         setAnsiColor( this, Color::RESET );
     }
 #endif
 }
 
-void ConsoleW::Initialize()
+void ConsoleW::initialize()
 {
 #ifdef COLORCONSOLE_REQUIRE_INITIALIZATION
     if( rdbuf() == NULL )
@@ -146,30 +146,33 @@ ConsoleW& ConsoleW::operator<<( Color color )
 
 void ConsoleW::set_color( Color color )
 {
+    if( m_coloringEnabled )
+    {
 #if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
-    if( m_consoleType <= ConsoleType::STD_ERROR )
-    {
-        flush();
+        if( m_consoleType <= ConsoleType::STD_ERROR )
+        {
+            flush();
 
-        if( color >= Color::RESET )
-        {
-            SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+            if( color >= Color::RESET )
+            {
+                SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+            }
+            else
+            {
+                SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+            }
         }
-        else
+        else if( m_consoleType == ConsoleType::CUSTOM )
         {
-            SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+            setAnsiColor( this, color );
         }
-    }
-    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
-    {
-        setAnsiColor( this, color );
-    }
 #else
-    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
-    {
-        setAnsiColor( this, color );
-    }
+        if( m_consoleType <= ConsoleType::CUSTOM )
+        {
+            setAnsiColor( this, color );
+        }
 #endif
+    }
 }
 
 } // namespace

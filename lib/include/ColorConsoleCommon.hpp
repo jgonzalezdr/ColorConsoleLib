@@ -32,8 +32,7 @@ enum class ConsoleType
 {
     STD_OUTPUT,     ///< Standard output
     STD_ERROR,      ///< Standard error
-    CUSTOM_COLOR,   ///< Custom colorized stream
-    CUSTOM_NOCOLOR  ///< Custom non-colorized stream
+    CUSTOM          ///< Custom stream
 };
 
 /**

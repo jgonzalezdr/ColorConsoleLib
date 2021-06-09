@@ -42,17 +42,17 @@ Console Console::cerr( ConsoleType::STD_ERROR );
 void Console::Init()
 {
 #if defined(COLORCONSOLE_REQUIRE_INITIALIZATION) && !defined(UNIT_TEST)
-    cout.Initialize();
-    cerr.Initialize();
+    cout.initialize();
+    cerr.initialize();
 #endif
 }
 // LCOV_EXCL_STOP
 
 Console::Console( ConsoleType consoleType )
 #ifdef COLORCONSOLE_REQUIRE_INITIALIZATION
-: std::ostream( NULL )
+: std::ostream( NULL ), m_coloringEnabled( true )
 #else
-: std::ostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::cerr.rdbuf() : std::cout.rdbuf() )
+: std::ostream( ( consoleType == ConsoleType::STD_ERROR ) ? std::cerr.rdbuf() : std::cout.rdbuf() ), m_coloringEnabled( true )
 #endif
 {
     m_consoleType = consoleType;
@@ -62,14 +62,14 @@ Console::Console( ConsoleType consoleType )
 #endif
 
 #ifndef COLORCONSOLE_REQUIRE_INITIALIZATION
-    Initialize();
+    initialize();
 #endif
 }
 
-Console::Console( std::streambuf *sb, bool color )
-: std::ostream( sb )
+Console::Console( std::streambuf *sb, bool enableColoring )
+: std::ostream( sb ), m_coloringEnabled( enableColoring )
 {
-    m_consoleType = color ? ConsoleType::CUSTOM_COLOR : ConsoleType::CUSTOM_NOCOLOR;
+    m_consoleType = ConsoleType::CUSTOM;
 
 #ifdef WIN32
     m_handle = INVALID_HANDLE_VALUE;
@@ -83,24 +83,24 @@ Console::~Console()
     {
         flush();
 
-        if( m_handle != INVALID_HANDLE_VALUE )
+        if( ( m_handle != INVALID_HANDLE_VALUE ) && m_coloringEnabled )
         {
             SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
         }
     }
-    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
+    else if( m_coloringEnabled )
     {
         setAnsiColor( this, Color::RESET );
     }
 #else
-    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
+    if( m_coloringEnabled )
     {
         setAnsiColor( this, Color::RESET );
     }
 #endif
 }
 
-void Console::Initialize()
+void Console::initialize()
 {
 #ifdef COLORCONSOLE_REQUIRE_INITIALIZATION
     if( rdbuf() == NULL )
@@ -135,30 +135,30 @@ Console& Console::operator<<( Color color )
 
 void Console::set_color( Color color )
 {
-#if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
-    if( m_consoleType <= ConsoleType::STD_ERROR )
+    if( m_coloringEnabled )
     {
-        flush();
-
-        if( color >= Color::RESET )
+#if defined(WIN32) && !defined(COLORCONSOLE_FORCE_ANSI_ESCAPE_CODES)
+        if( m_consoleType <= ConsoleType::STD_ERROR )
         {
-            SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+            flush();
+
+            if( color >= Color::RESET )
+            {
+                SetConsoleTextAttribute( m_handle, m_origConsoleAttrs );
+            }
+            else
+            {
+                SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+            }
         }
         else
         {
-            SetConsoleTextAttribute( m_handle, static_cast<WORD>(color) );
+            setAnsiColor( this, color );
         }
-    }
-    else if( m_consoleType == ConsoleType::CUSTOM_COLOR )
-    {
-        setAnsiColor( this, color );
-    }
 #else
-    if( m_consoleType <= ConsoleType::CUSTOM_COLOR )
-    {
         setAnsiColor( this, color );
-    }
 #endif
+    }
 }
 
 } // namespace

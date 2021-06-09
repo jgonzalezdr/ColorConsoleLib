@@ -7,11 +7,11 @@ Color Console Library
 
 ## About
 
-ColorConsoleLib is a library that adds text colorization capabilities to the C++ standard output and error streams ([cout](http://www.cplusplus.com/reference/iostream/cout/)/[wcout](http://www.cplusplus.com/reference/iostream/wcout/) and [cerr](http://www.cplusplus.com/reference/iostream/cerr/)/[wcerr](http://www.cplusplus.com/reference/iostream/cout/)).
+ColorConsoleLib is a library that adds text coloring capabilities to the C++ standard output and error streams ([cout](http://www.cplusplus.com/reference/iostream/cout/)/[wcout](http://www.cplusplus.com/reference/iostream/wcout/) and [cerr](http://www.cplusplus.com/reference/iostream/cerr/)/[wcerr](http://www.cplusplus.com/reference/iostream/cout/)).
 
 ## Usage
 
-ColorConsoleLib provides compatible replacements for the C++ standard _cout_, _cerr_, _wcout_ and _wcerr_ output streams in the **ColorConsole** namespace that add text colorization capabilities by accepting **Color**s to the _insertion operator_ (`<<`).
+ColorConsoleLib provides compatible replacements for the C++ standard _cout_, _cerr_, _wcout_ and _wcerr_ output streams in the **ColorConsole** namespace that add text coloring capabilities by accepting **Color**s to the _insertion operator_ (`<<`).
 
 ``` CPP
 #include "ColorConsole.hpp"
@@ -36,7 +36,7 @@ There are 16 foreground **Color**s (which names start with `FG_`) that can be mi
 >
 > The background **Color** `FG_NONE` interpretation depends on the terminal. Some interpret it as transparent (showing the underlying console color), others as black.
 
-The special **Color** `RESET` can be used to return the console to the original "non-colorized" mode.
+The special **Color** `RESET` can be used to return the console to the original "non-colored" mode.
 
 Alternatively, the **set_color()** member function can be used, which behaves just like inserting a **Color** in the stream.
 

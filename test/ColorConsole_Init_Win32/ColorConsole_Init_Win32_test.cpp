@@ -77,7 +77,7 @@ TEST_GROUP( ColorConsole )
     void CallInitialize( ColorConsole::Console* console )
     {
         RedirectRealConsole();
-        console->Initialize();
+        console->initialize();
         RestoreRealConsole();
     }
 };
@@ -100,6 +100,7 @@ TEST( ColorConsole, Output_Init )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( true, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -246,7 +247,7 @@ TEST( ColorConsole, Output_Init )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
-    // Reset color combined with color definition 
+    // Reset color combined with color definition
     //
 
     // Prepare
@@ -311,6 +312,7 @@ TEST( ColorConsole, Error_Init )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, errBuffer.in_avail() );
+    CHECK_EQUAL( true, err->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -402,6 +404,7 @@ TEST( ColorConsole, Output_DoubleInit )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( true, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -477,6 +480,7 @@ TEST( ColorConsole, Error_DoubleInit )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, errBuffer.in_avail() );
+    CHECK_EQUAL( true, err->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -551,6 +555,7 @@ TEST( ColorConsole, NoInit )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( true, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();

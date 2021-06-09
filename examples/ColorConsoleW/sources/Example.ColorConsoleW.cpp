@@ -19,7 +19,7 @@ int main( int argc, const char* argv[] )
 {
     ConsoleW::Init();
 
-    wcout << "wcout: Initial color (non-colorized)" << endl << endl;
+    wcout << "wcout: Initial color (non-colored)" << endl << endl;
 
     wcout << Color::FG_LIGHT_BLUE;
     wcout << "wcout: Light blue" << endl;
@@ -96,7 +96,7 @@ int main( int argc, const char* argv[] )
 
     wcout << Color::RESET;
     wcout << endl;
-    wcout << L"wcout: Reset to initial color (non-colorized)";
+    wcout << L"wcout: Reset to initial color (non-colored)";
     wcout << endl;
 
     wcout << endl;

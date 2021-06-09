@@ -25,7 +25,7 @@ namespace ColorConsole
 
 /**
  * Output stream representing a console oriented to narrow characters (of type char)
- * with text colorization capabilities.
+ * with text coloring capabilities.
  */
 class COLORCONSOLE_API Console : public std::ostream
 {
@@ -33,16 +33,16 @@ public:
     /**
      * Constructor for custom streams.
      *
-     * Colorization of custom streams (if enabled) will be performed using ANSI color escape codes.
+     * Coloring of custom streams (if enabled) will be performed using ANSI color escape codes.
      *
      * Custom streams are mostly intended for testing software that writes on color consoles.
      *
      * param sb [in] Stream buffer where the strem will write to
-     * param color [in] Indicates if colorization is enabled
+     * param enableColoring [in] Indicates if coloring shall be enabled
      *
-     * @param[in,out] consoleType Console to colorize
+     * @param[in,out] consoleType Console to color
      */
-    Console( std::streambuf *sb, bool color = true );
+    Console( std::streambuf *sb, bool enableColoring = true );
 
     /**
      * Destructor.
@@ -55,6 +55,36 @@ public:
      * @param[in] color Color to be set, or RESET to reset to default value
      */
     void set_color( Color color );
+
+    /**
+     * Enables coloring.
+     *
+     * @param[in] value @c true to enable coloring, @c false to disable coloring
+     */
+    void enable_coloring( bool value = true )
+    {
+        m_coloringEnabled = value;
+    }
+
+    /**
+     * Disables coloring.
+     *
+     * @param[in] value @c true to disable coloring, @c false to enable coloring
+     */
+    void disable_coloring( bool value = true )
+    {
+        m_coloringEnabled = !value;
+    }
+
+    /**
+     * Indicates if coloring is enabled.
+     *
+     * @return @c true if coloring is enabled, @c false otherwise
+     */
+    bool is_coloring_enabled() const
+    {
+        return m_coloringEnabled;
+    }
 
     /**
      * Sets (or resets) the console color.
@@ -357,13 +387,15 @@ private:
     /**
      * Constructor for standard streams.
      *
-     * @param[in] consoleType Console to colorize
+     * @param[in] consoleType Console to color
      */
     Console( ConsoleType consoleType );
 
-    void Initialize();
+    void initialize();
 
     ConsoleType m_consoleType;
+
+    bool m_coloringEnabled;
 
 #ifdef WIN32
     HANDLE m_handle;

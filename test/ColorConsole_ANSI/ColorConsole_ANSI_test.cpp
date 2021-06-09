@@ -88,6 +88,7 @@ TEST( ColorConsole, Output )
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
     CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::STD_OUTPUT ), static_cast<int>( out->get_console_type() ) );
+    CHECK_EQUAL( true, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -476,6 +477,7 @@ TEST( ColorConsole, Error )
     mock().checkExpectations();
     CHECK_EQUAL( 0, errBuffer.in_avail() );
     CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::STD_ERROR ), static_cast<int>( err->get_console_type() ) );
+    CHECK_EQUAL( true, err->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -525,6 +527,242 @@ TEST( ColorConsole, Error )
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
     STRCMP_EQUAL( "\033[0m", readFromStringBuf(errBuffer).c_str() );
+
+    // Cleanup
+}
+
+TEST( ColorConsole, Output_ColoringDisabled )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::Console* out = ConstructConsole( ColorConsole::ConsoleType::STD_OUTPUT );
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::STD_OUTPUT ), static_cast<int>( out->get_console_type() ) );
+    CHECK_EQUAL( true, out->is_coloring_enabled() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Disable coloring
+    //
+
+    // Prepare
+
+    // Exercise
+    out->disable_coloring();
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( false, out->is_coloring_enabled() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light red
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << ColorConsole::Color::FG_LIGHT_RED;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write something
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << "Something";
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "Something", readFromStringBuf(outBuffer).c_str() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write end-of-line
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << ColorConsole::endl;
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "\n", readFromStringBuf(outBuffer).c_str() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color dark cyan and background color yellow
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_DARK_CYAN | ColorConsole::Color::BG_YELLOW);
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Reset color
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << ColorConsole::Color::RESET;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color white and background color none
+    //
+
+    // Prepare
+
+    // Exercise
+    *out << (ColorConsole::Color::FG_WHITE | ColorConsole::Color::BG_NONE);
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+
+    // Exercise
+    delete out;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
+
+    // Cleanup
+}
+
+TEST( ColorConsole, Error_ColoringDisabled )
+{
+    //////////////////////////////////////////////////////////////////////////
+    // Creation
+    //
+
+    // Prepare
+
+    // Exercise
+    ColorConsole::Console* err = ConstructConsole( ColorConsole::ConsoleType::STD_ERROR );
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::STD_ERROR ), static_cast<int>( err->get_console_type() ) );
+    CHECK_EQUAL( true, err->is_coloring_enabled() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Disable coloring
+    //
+
+    // Prepare
+
+    // Exercise
+    err->disable_coloring();
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
+    CHECK_EQUAL( false, err->is_coloring_enabled() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Set foreground color light red
+    //
+
+    // Prepare
+
+    // Exercise
+    *err << ColorConsole::Color::FG_LIGHT_RED;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Write something
+    //
+
+    // Prepare
+
+    // Exercise
+    *err << "Something";
+
+    // Verify
+    mock().checkExpectations();
+    STRCMP_EQUAL( "Something", readFromStringBuf(errBuffer).c_str() );
+
+    // Cleanup
+    mock().clear();
+
+    //////////////////////////////////////////////////////////////////////////
+    // Destruction
+    //
+
+    // Prepare
+
+    // Exercise
+    delete err;
+
+    // Verify
+    mock().checkExpectations();
+    CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( 0, errBuffer.in_avail() );
 
     // Cleanup
 }

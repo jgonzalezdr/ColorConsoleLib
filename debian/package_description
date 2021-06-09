@@ -1,4 +1,4 @@
-Library providing capabilities to output colorized text to the console.
+Library providing capabilities to output colored text to the console.
  This library provides output streams compatible with standard cerr and cout
- streams with additional capabilities to easily colorized printed text.
+ streams with additional capabilities to easily colored printed text.
  

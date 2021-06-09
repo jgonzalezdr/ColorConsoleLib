@@ -39,7 +39,7 @@ TEST_GROUP( ColorConsoleW )
 
     void CallInitialize( ColorConsole::ConsoleW* console )
     {
-        console->Initialize();
+        console->initialize();
     }
 };
 
@@ -61,7 +61,8 @@ TEST( ColorConsoleW, Custom_Color )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
-    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM_COLOR ), static_cast<int>( out->get_console_type() ) );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM ), static_cast<int>( out->get_console_type() ) );
+    CHECK_EQUAL( true, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -659,7 +660,7 @@ TEST( ColorConsoleW, Custom_Color )
     mock().clear();
 
     //////////////////////////////////////////////////////////////////////////
-    // Reset color combined with color definition 
+    // Reset color combined with color definition
     //
 
     // Prepare
@@ -736,7 +737,8 @@ TEST( ColorConsoleW, Custom_NoColor )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
-    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM_NOCOLOR ), static_cast<int>( out->get_console_type() ) );
+    CHECK_EQUAL( static_cast<int>( ColorConsole::ConsoleType::CUSTOM ), static_cast<int>( out->get_console_type() ) );
+    CHECK_EQUAL( false, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
@@ -804,6 +806,7 @@ TEST( ColorConsoleW, Custom_Init )
     // Verify
     mock().checkExpectations();
     CHECK_EQUAL( 0, outBuffer.in_avail() );
+    CHECK_EQUAL( false, out->is_coloring_enabled() );
 
     // Cleanup
     mock().clear();
