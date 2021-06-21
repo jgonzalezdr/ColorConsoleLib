@@ -359,6 +359,18 @@ public:
     }
 
     /**
+     * Inserter for text strings.
+     *
+     * @param[in] text Text string
+     * @return The ColorConsole object (*this)
+     */
+    Console& operator<<( const std::string &text )
+    {
+        *(static_cast<std::ostream*>(this)) << text;
+        return *this;
+    }
+
+    /**
      * Returns the console type.
      *
      * @return The console type

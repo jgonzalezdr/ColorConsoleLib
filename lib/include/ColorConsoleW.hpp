@@ -369,6 +369,18 @@ public:
     }
 
     /**
+     * Inserter for text strings.
+     *
+     * @param[in] text Text string
+     * @return The ColorConsoleW object (*this)
+     */
+    ConsoleW& operator<<( const std::wstring &text )
+    {
+        *(static_cast<std::wostream*>(this)) << text;
+        return *this;
+    }
+
+    /**
      * Returns the console type.
      *
      * @return The console type
