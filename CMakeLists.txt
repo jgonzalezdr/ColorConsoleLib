@@ -2,6 +2,8 @@ cmake_minimum_required( VERSION 3.3 )
 
 project( ColorConsoleLib.Top )
 
+include( CTest )
+
 option( CI_MODE "Enable continuous integration mode" OFF )
 
 if( TARGET_NAMESPACE )
@@ -48,6 +50,8 @@ else()
     set( CMAKE_EXE_LINKER_FLAGS_COVERAGE ${CMAKE_EXE_LINKER_FLAGS_DEBUG} )
 endif()
 
+option( COVERAGE_VERBOSE "Coverage analysis is performed in verbose mode" OFF )
+
 if( WIN32 AND NOT MSVC )
     add_definitions( -DWIN32 )
 endif()
@@ -85,7 +89,7 @@ set( CONFIG_MSG "${CONFIG_MSG}
     TARGET_NAMESPACE:                   ${PRINTED_TARGET_NAMESPACE}
 
 Configured Features:
-    ENABLE_TEST:                        ${ENABLE_TEST}
+    BUILD_TESTING:                      ${BUILD_TESTING}
     COVERAGE:                           ${COVERAGE}
     COVERAGE_VERBOSE:                   ${COVERAGE_VERBOSE}
     ENABLE_INSTALLER:                   ${ENABLE_INSTALLER}

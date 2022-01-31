@@ -22,7 +22,7 @@ $build_config = $env:Configuration
 $coverage = if ($env:Configuration -eq 'Coverage') {'ON'} else {'OFF'}
 $test = if ($env:Test -eq 'False') {'OFF'} else {'ON'}
 
-$cmake_options = "-DCI_MODE=ON -DENABLE_TEST=$test"
+$cmake_options = "-DCI_MODE=ON -DBUILD_TESTING=$test"
 
 if( $test -eq 'ON' )
 {

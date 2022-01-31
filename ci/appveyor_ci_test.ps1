@@ -81,12 +81,12 @@ if (!($env:Test -eq 'False'))
         {
             $msbuild_cmd = Get-MsBuildCmd
 
-            Invoke-Command "$msbuild_cmd $logger_arg /property:Configuration=$build_config run_tests.vcxproj" "$build_dir\test"
+            Invoke-Command "$msbuild_cmd $logger_arg /property:Configuration=$build_config execute_tests.vcxproj" "$build_dir\test"
         }
 		
         'LINUX-GCC'
         {
-            $build_target = if ($env:Configuration -eq 'Coverage') {'coverage_process'} else {'run_tests'}
+            $build_target = if ($env:Configuration -eq 'Coverage') {'coverage_process'} else {'execute_tests'}
 
             Invoke-Command "make $build_target" "$build_dir"
         }
@@ -98,7 +98,7 @@ if (!($env:Test -eq 'False'))
             # Add mingw to the path
             Add-PathFolder $mingw_path
 
-            $build_target = if ($env:Configuration -eq 'Coverage') {'coverage_process'} else {'run_tests'}
+            $build_target = if ($env:Configuration -eq 'Coverage') {'coverage_process'} else {'execute_tests'}
 
             Invoke-Command "mingw32-make $build_target" "$build_dir"
 
