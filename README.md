@@ -1,4 +1,3 @@
-
 Color Console Library
 ===========
 
@@ -43,6 +42,7 @@ Alternatively, the **set_color()** member function can be used, which behaves ju
 ### Example Output
 
 ![Example Output](https://github.com/jgonzalezdr/ColorConsoleLib/blob/gh-pages/images/ColorConsoleLib.png?raw=true)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjgonzalezdr%2FColorConsoleLib.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjgonzalezdr%2FColorConsoleLib?ref=badge_shield)
 
 ## Building from Source
 
@@ -75,3 +75,7 @@ Alternatively, the **set_color()** member function can be used, which behaves ju
 | `-DCOVERAGE`          | Enables code coverage in tests<br>_(only for multi-config generators)_<br>`ON`_(default)_<br>`OFF` |
 | `-DCOVERAGE_VERBOSE`  | Enables verbose code coverage<br>`ON`<br>`OFF`_(default)_ |
 | `-DCI_MODE`           | Enables Continous Integration mode<br>`ON`<br>`OFF`_(default)_ |
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjgonzalezdr%2FColorConsoleLib.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjgonzalezdr%2FColorConsoleLib?ref=badge_large)
